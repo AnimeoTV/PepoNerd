@@ -1,15 +1,13 @@
-# Polaris - Your Discord AI Assistant
+# Spellscord - 
+An awesome spell checking Discord bot
 
-Polaris is a Discord bot powered by Groq's powerful LLM, designed to provide insightful responses and assistance within your Discord server.
+Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pops out of nowhere and provide relevant correction of messages that contains misspelling errors.
 
 ## Features
 
-* **AI-Powered Conversations:** Engage in natural conversations with Polaris. It leverages Groq's `llama3-70b-8192` model to provide context-aware and engaging responses.
-* **Context Retention:** Polaris remembers previous messages in a channel, enabling it to maintain the flow of conversation and deliver more relevant answers.
-* **Customizable System Prompt:** Tailor Polaris' behavior and knowledge base by editing the `systemPrompt` variable in `src/ai/AI.ts`.
-* **Event-Driven Architecture:** Polaris utilizes Discord.js events to efficiently handle interactions, commands, and incoming messages.
-* **Configuration Options:**  Basic configuration settings are available in `config.json`, allowing you to specify channel categories and roles for bot access.
-* **Developer-Friendly Debugging:**  The `debug` command provides tools to inspect embeds and test ticket-related functionality.
+* **Customizable System Prompt:** TODO
+* **Event-Driven Architecture:** Spellscord utilizes Discord.js events to efficiently handle interactions, commands, and incoming messages.
+* **Configuration Options:**  Basic configuration settings are available in `config.json`, TODO
 
 ## Prerequisites
 
@@ -23,8 +21,8 @@ Polaris is a Discord bot powered by Groq's powerful LLM, designed to provide ins
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/MacoGaminG/Polaris.git
-   cd Polaris
+   git clone https://github.com/Truiteseche/spellscord.git
+   cd spellscord
    ```
 2. **Install Dependencies:**
 
@@ -43,9 +41,7 @@ Polaris is a Discord bot powered by Groq's powerful LLM, designed to provide ins
 4. **Configuration:**
    Adjust settings in `config.json`:
 
-   * `channelCategories`:  Array of category IDs where Polaris will be active.
-   * `channelToIgnore`: Array of channel IDs within the categories to exclude.
-   * `configAccess`: (Not fully implemented)  Placeholder for roles that can manage the bot configuration.
+   TODO
 5. **Build and Run:**
 
    ```bash
@@ -55,15 +51,15 @@ Polaris is a Discord bot powered by Groq's powerful LLM, designed to provide ins
 
 ## Usage
 
-* **Invite Polaris to your Server:**  Generate an invite link from the Discord Developer Portal for your bot.
-* **Interact with Polaris:** Once Polaris is in your server and active in the configured categories, send messages in those channels to initiate conversations.
+* **Invite Spellscord to your Server:**  Generate an invite link from the Discord Developer Portal for your bot.
+* **Interact with Spellscord:** Once Spellscord is in your server and active in the configured categories, send messages in those channels to initiate conversations.
 * **Developer Commands:** Use the `/debug` slash command for testing and troubleshooting.
 
 ## Customization
 
-* **System Prompt:**  Edit `src/ai/AI.ts` to refine Polaris' responses:
+* **System Prompt:**  Edit `src/ai/AI.ts` to refine Spellscord' responses:
   * Modify the system instructions, guidelines, and database to align with your needs.
-* **Commands and Events:**  Extend Polaris' functionality by creating new commands in `src/commands` and events in `src/events`.
+* **Commands and Events:**  Extend Spellscord's functionality by creating new commands in `src/commands` and events in `src/events`.
 * **Advanced Configuration:** (Future Development) Implement more robust configuration options for role-based access control and bot management.
 
 ## Contributing
