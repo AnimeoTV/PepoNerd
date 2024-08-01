@@ -1,6 +1,6 @@
 {
-  "name": "polaris",
-  "version": "1.0.0",
+  "name": "spellscord",
+  "version": "0.1.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {

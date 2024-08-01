@@ -1,7 +1,7 @@
-# Spellscord - 
-An awesome spell checking Discord bot
 
-Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pops out of nowhere and provide relevant correction of messages that contains misspelling errors.
+# Spellscord - Your Discord spell checking assistant
+
+Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pop out of nowhere and provide relevant correction to messages containing spelling mistakes.
 
 ## Features
 
@@ -24,11 +24,13 @@ Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pops out
    git clone https://github.com/Truiteseche/spellscord.git
    cd spellscord
    ```
+
 2. **Install Dependencies:**
 
    ```bash
    pnpm install 
    ```
+
 3. **Environment Variables:**
    Create a `.env` file in the root directory and add the following:
 
@@ -38,6 +40,7 @@ Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pops out
         GROQ_API_KEY    =
         DISCORD_TOKEN   =
    ```
+
 4. **Configuration:**
    Adjust settings in `config.json`:
 

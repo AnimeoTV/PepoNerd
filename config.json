@@ -1,4 +1,7 @@
 {
+    "description": "The langage that the bot uses. You can add your own translations in the src/locales folder.",
+    "localization": "fr",
+
     "description": "channel categories of Discord where the bot will work",
     "channelCategories"       : [
         "1111111111111111111"
@@ -20,7 +23,7 @@
     "description": "Number of messages that the bot will ignore (starting to the beginning of the chat history)",
     "messagesCountToIgnore": 0,
 
-    "description": "List of all the models that polaris can use to answer the user (the order counts as priority order)",
+    "description": "List of all the models that Spellscord can use to answer the user (the order counts as priority order)",
     "supportedModelsID": [
         "llama-3.1-405b-reasoning",
         "llama-3.1-70b-versatile",
@@ -33,5 +36,5 @@
     ],
 
     "description": "The text that will be append at the end of the message",
-    "endDisclaimer": "Important: Polaris can make mistakes. Consider checking important information."
+    "endDisclaimer": "Important: Spellscord can make mistakes. Consider checking important information."
 }

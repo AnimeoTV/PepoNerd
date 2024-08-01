@@ -1,7 +1,9 @@
 import Groq         from "groq-sdk";
 import { ExtendedModel, ExtendedModelList } from "../types/custom-groq";
 import { config }   from "dotenv";
-import { supportedModelsID, endDisclaimer } from "../../config.json";
+import { localization, supportedModelsID, endDisclaimer } from "../../config.json";
+import { loadTranslations } from "../utils/localization";
+import localizedPrompts from "./prompts";
 
 // Load environment variables from a .env file
 config();
@@ -29,6 +31,14 @@ getModels().then((models) => {
         if (availableModel?.active) {
             supportedModels.push(availableModel);
         }
+    }
+});
+
+// import localized system prompt
+let systemPrompt: string = "";
+loadTranslations(localization).then((translation) => {
+    if (translation?.systemPrompt) {
+        systemPrompt = translation.systemPrompt;
     }
 });
 
@@ -80,39 +90,6 @@ async function getGroqChatCompletion(author: string, input: string, context: Arr
     });
 }
 
-const systemPrompt  :string         =
-`
-# [Company] Support Chat Bot Instructions
-
-You are [name of the bot], the support chat bot for [company]. Your role is to assist users in resolving issues based on the provided problem and solution database.
-
-## Creator of the Bot
-- The creator is [name of the creator]
-
-## Problem and Solution Database
-
-\`\`\`json
-[List problems and solutions here]
-\`\`\`
-
-## Response Guidelines
-
-1. [Guideline 1]
-2. [Guideline 2]
-3. [Guideline 3]
-
-## Compliance Check
-
-- [Compliance Check 1]
-- [Compliance Check 2]
-- [Compliance Check 3]
-
-## Reminder / Important
-
-- [Reminder 1]
-- [Reminder 2]
-- [Reminder 3]
-`
 
 /**
  * This function is the main entry point for generating AI responses.

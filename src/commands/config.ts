@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from "discord.js
 
 export default {
     name: "config",
-    description: "Configure Polaris settings",
+    description: "Configure Spellscord settings",
     options: [
         {
             name: "access",

@@ -34,7 +34,7 @@ export default {
             const messages      = message.channel.messages;
 
             // Retrieve context from previous messages (defined in getContext function)
-            const context = await getContext(messages, client);
+            const context = await getContext(messages, client); // TODO: remove context because we don't need it anymore
 
             // Log user input
             console.log("\n===== INPUT MESSAGE\n", userInput, "\n");
