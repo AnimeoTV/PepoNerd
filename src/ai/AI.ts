@@ -3,7 +3,6 @@ import { ExtendedModel, ExtendedModelList } from "../types/custom-groq";
 import { config }   from "dotenv";
 import { localization, supportedModelsID, endDisclaimer } from "../../config.json";
 import { loadTranslations } from "../utils/localization";
-import localizedPrompts from "./prompts";
 
 // Load environment variables from a .env file
 config();
@@ -49,35 +48,24 @@ interface GroqChatCompletion {
 
 /**
  * This function fetches a chat completion from Groq based on provided parameters.
- * @param author The name of the user interacting with the bot (optional).
  * @param input The user's input message.
  * @param context An optional array of previous messages for context (role and content).
  * @param model A string that is the ID of the model that should be used to generate the content
  * @returns A Promise resolving to a GroqChatCompletion object containing the response.
  */
-async function getGroqChatCompletion(author: string, input: string, context: Array<{ role: string, content: string }> | null, model: string): Promise<GroqChatCompletion> {
+async function getGroqChatCompletion(input: string, model: string): Promise<GroqChatCompletion> {
 
     // Define a default set of messages including a system prompt and the user input
     const messages: Array<{ role: string, content: string }> = [
         {
             role    : "system",
-            content : `
-                ${systemPrompt}
-
-                If hello has already been said, you musn't say hello anymore.
-                ${author ? `You must call the user by his name which is ${author}.` : ""}
-            `,
+            content : systemPrompt,
         },
         {
             role    : "user",
-            content : `${input}`,
+            content : input,
         }
     ];
-
-    // If context is provided, append it to the message list
-    if (context && context.length > 0) {
-        messages.unshift(...context);
-    }
 
     console.log("Model in use:", model);
 
@@ -86,7 +74,9 @@ async function getGroqChatCompletion(author: string, input: string, context: Arr
         messages    : messages,
         model       : model,                // Specifying the Groq model for chat completions
         stream      : false,                // Disabling message streaming
-        temperature : 1,                    // Setting the randomness/creativity of the response (1 = default)
+        temperature : 0,                    // Setting the randomness/creativity of the response (1 = default)
+        top_p       : 0,
+        // max_tokens  : 2048
     });
 }
 
@@ -95,21 +85,22 @@ async function getGroqChatCompletion(author: string, input: string, context: Arr
  * This function is the main entry point for generating AI responses.
  * @param author The name of the user interacting with the bot (optional).
  * @param input The user's input message.
- * @param context An optional array of previous messages for context (role and content).
  * @param model An optional string that is the ID of the model that should be used to generate the content
  * @returns A Promise resolving to a string containing the generated AI response.
  */
-async function generate(author: string, input: string, context: Array<{ role: string, content: string }> | null, model: string | null = null): Promise<string> {
+async function generate(input: string, model: string | null = null): Promise<string> {
     try {
         if (!model) {
             model = supportedModels[0]?.id ?? supportedModelsID[0] ??  "llama3-70b-8192";
         }
 
         // Fetch a chat completion from Groq
-        const chatCompletion = await getGroqChatCompletion(author, input, context, model);
+        const chatCompletion = await getGroqChatCompletion(input, model);
 
         // Extract the first generated response or return an error message + append endDisclaimer
         const response = (chatCompletion.choices[0]?.message?.content || "") + (endDisclaimer ? "\n-# " + endDisclaimer : "");
+
+        // TODO: strip all punctuation and spaces and lower everything in order to check if there have been any relevant correction.
 
         console.log("\n===== MESSAGE GENERATED\n", response);
         return response;
@@ -123,7 +114,7 @@ async function generate(author: string, input: string, context: Array<{ role: st
         }
 
         console.log(`An error occured, falling back on the ${supportedModels[modelIdx + 1]?.id} model`);
-        return generate(author, input, context, supportedModels[modelIdx + 1]?.id);
+        return generate(input, supportedModels[modelIdx + 1]?.id);
     }
 }
 

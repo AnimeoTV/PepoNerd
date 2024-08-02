@@ -26,21 +26,11 @@ export default {
         const userInput = message.content;
 
         try {
-            // Show typing indicator
-            message.channel.sendTyping();
-            const timeoutID = setInterval(() => message.channel.sendTyping(), 3000); // resend typing until the message is generated and sent (a single typing event lasts 6s)
-
-            // Get a reference to the message manager for context retrieval
-            const messages      = message.channel.messages;
-
-            // Retrieve context from previous messages (defined in getContext function)
-            const context = await getContext(messages, client); // TODO: remove context because we don't need it anymore
-
             // Log user input
             console.log("\n===== INPUT MESSAGE\n", userInput, "\n");
 
-            // Generate AI response using user input and context
-            const response = (await AI.generate(`<@${message.author.id}>}`, userInput, context));
+            // Generate AI response using user input
+            const response = `<@${message.author.id}>}\n` + (await AI.generate(userInput));
 
             // Reply to the message with the generated AI response
             // make sure to not send a message that exceeds discord's message length limit
@@ -51,7 +41,6 @@ export default {
                     message.channel.send(chunk); // then send other messages in the usual way
                 }
             }
-            clearInterval(timeoutID); // clear typing
         } catch (error) {
             
             // Log error for debugging
@@ -61,43 +50,4 @@ export default {
             message.reply("An error has occurred. Please try again later.");
         }
     }
-}
-
-/**
- * This function retrieves the conversation context from previous messages in the channel.
- * @param messages Reference to the message manager for the channel.
- * @param client The Discord client instance.
- * @returns An array of objects containing message role ("assistant" or "user") and content.
- */
-async function getContext(messages: GuildMessageManager | DMMessageManager, client: Client): Promise<{ role: string; content: string; }[]> {
-    
-    // Fetch all messages from the channel
-    return await messages.fetch().then(messages => {
-
-        // Filter out pinned messages and reverse the order (newest first)
-        const contextMessages: Array<{role: string, content: string}> = messages
-            .reverse()
-            .filter(message => message.type !== MessageType.ChannelPinnedMessage)
-            .map(message => {
-                const role = message.author.id === client.user?.id ? "assistant" : "user";
-                // Extract message content
-                const content = message.content;
-                return { role, content };
-            }
-        );
-
-        const lastContextReset = contextMessages.filter(message => (message.role === "assistant" && message.content === clearContextMessage)).at(-1);
-        if (lastContextReset) {
-            contextMessages.splice(0, contextMessages.indexOf(lastContextReset)+1);
-        }
-
-        // Remove the current message from the context
-        contextMessages.pop();
-        // Ignore first messages
-        for (let i = 0; i < messagesCountToIgnore; i++) {
-            contextMessages.shift();
-        }
-
-        return contextMessages;
-    });
 }

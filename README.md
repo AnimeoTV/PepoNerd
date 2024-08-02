@@ -35,10 +35,10 @@ Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pop out 
    Create a `.env` file in the root directory and add the following:
 
    ```plaintext
-        GUILD_ID        =
-        CLIENT_ID       =
-        GROQ_API_KEY    =
-        DISCORD_TOKEN   =
+   GUILD_ID        =
+   CLIENT_ID       =
+   GROQ_API_KEY    =
+   DISCORD_TOKEN   =
    ```
 
 4. **Configuration:**
