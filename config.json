@@ -32,5 +32,5 @@
     ],
 
     "description": "The text that will be append at the end of the message",
-    "endDisclaimer": "Important: Spellscord can make mistakes. Consider checking important information."
+    "endDisclaimer": "Important: Spellscord can make mistakes. Consider checking text diff before editing your message."
 }

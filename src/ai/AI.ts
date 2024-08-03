@@ -1,7 +1,7 @@
 import Groq         from "groq-sdk";
 import { ExtendedModel, ExtendedModelList } from "../types/custom-groq";
 import { config }   from "dotenv";
-import { localization, supportedModelsID, endDisclaimer } from "../../config.json";
+import { localization, supportedModelsID } from "../../config.json";
 import { loadTranslations } from "../utils/localization";
 
 // Load environment variables from a .env file
@@ -76,7 +76,7 @@ async function getGroqChatCompletion(input: string, model: string): Promise<Groq
         stream      : false,                // Disabling message streaming
         temperature : 0,                    // Setting the randomness/creativity of the response (1 = default)
         top_p       : 0,
-        // max_tokens  : 2048
+        max_tokens  : 8192
     });
 }
 
@@ -97,12 +97,10 @@ async function generate(input: string, model: string | null = null): Promise<str
         // Fetch a chat completion from Groq
         const chatCompletion = await getGroqChatCompletion(input, model);
 
-        // Extract the first generated response or return an error message + append endDisclaimer
-        const response = (chatCompletion.choices[0]?.message?.content || "") + (endDisclaimer ? "\n-# " + endDisclaimer : "");
+        // Extract the first generated response or return an error message
+        const response = (chatCompletion.choices[0]?.message?.content || "");
 
-        // TODO: strip all punctuation and spaces and lower everything in order to check if there have been any relevant correction.
-
-        console.log("\n===== MESSAGE GENERATED\n", response);
+        console.log("\n===== MESSAGE GENERATED\n" + response);
         return response;
     } catch (error) {
         // Pick the current supported model in use and check if the next one exists

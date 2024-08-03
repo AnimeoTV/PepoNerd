@@ -1,8 +1,10 @@
-import AI                                                                       from "../ai/AI";
-import { Client, DMMessageManager, GuildMessageManager, Message, MessageType }  from "discord.js";
+import AI from "../ai/AI";
+import { ChannelType, Client, Message, ThreadAutoArchiveDuration } from "discord.js";
 import { splitTextIntoChunks } from "../utils/strings";
+import { isGuildTextThreadManager, isThreadable } from "../types/discordjs-typeguards";
 import constants from "../utils/constants";
 import { clearContextMessage, messagesCountToIgnore } from "../../config.json";
+import { beautifyResponse, containsTheExactUserInput, isNoMistakesSequence, isThereAnyRelevantCorrection } from "../utils/spellscord-responses-management";
 
 
 /**
@@ -27,18 +29,31 @@ export default {
 
         try {
             // Log user input
-            console.log("\n===== INPUT MESSAGE\n", userInput, "\n");
+            console.log(`\n===== INPUT MESSAGE\n${userInput}\n`);
 
             // Generate AI response using user input
-            const response = `<@${message.author.id}>}\n` + (await AI.generate(userInput));
+            const response = (await AI.generate(userInput));
+            
+            if (isNoMistakesSequence(response) || !isThereAnyRelevantCorrection(userInput, response) || containsTheExactUserInput(userInput, response)) {
+                console.log("The user's message has been considered valid");
+                return;
+            }
 
-            // Reply to the message with the generated AI response
-            // make sure to not send a message that exceeds discord's message length limit
-            const responseChunks: string[] = splitTextIntoChunks(response, constants.MAX_MESSAGE_LENGTH);
-            message.reply(responseChunks[0]!); // use reply for the first message
-            if (response.length > 1) {
-                for (const chunk of responseChunks.slice(1, responseChunks.length)) {
-                    message.channel.send(chunk); // then send other messages in the usual way
+            const header = `<@${message.author.id}> 🗣️ https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}\n`;
+            const finalOutput = header + beautifyResponse(response);
+            
+            if (isThreadable(message.channel) && isGuildTextThreadManager(message.channel.threads)) {
+                const thread = await message.channel.threads.create({
+                    name: "Hum... Actually☝️🤓",
+                    type: ChannelType.PrivateThread,
+                    autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
+                    reason: "Needed a separate and private thread so as to not disclose to everyone the user's mistakes",
+                });
+                
+                // Make sure to not send a message that exceeds discord's message length limit
+                const responseChunks: string[] = splitTextIntoChunks(finalOutput, constants.MAX_MESSAGE_LENGTH);
+                for (const chunk of responseChunks) {
+                    thread.send(chunk);
                 }
             }
         } catch (error) {
