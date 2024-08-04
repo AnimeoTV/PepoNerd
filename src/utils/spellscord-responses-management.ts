@@ -19,14 +19,15 @@ loadTranslations(localization).then((translation) => {
 });
 
 export function isNoMistakesSequence(response: string): boolean {
-    return response.trim() === noMistakesSequence.trim();
+    const parsedResponse = parseResponse(response);
+    return response.trim() === noMistakesSequence.trim() || parsedResponse[0]?.trim() === noMistakesSequence.trim();
 }
 
 function clearString(str: string) {
-    const UNNECESSARY_CHAR = [" ", "\n", "\r", ".", "!", "?", "…", ",", ";", ":", "/"];
+    const UNNECESSARY_CHAR = [" ", "\n", "\r", ".", "!", "?", "…", ",", ";", ":", "'", "/"];
     let output = str.toLowerCase();
     // remove all unnecessary char form the text
-    for (let char in UNNECESSARY_CHAR) {
+    for (let char of UNNECESSARY_CHAR) {
         output = output.replaceAll(char, "");
     }
 

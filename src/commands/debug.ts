@@ -1,78 +1,73 @@
+
 import { APIApplicationCommandInteraction, ApplicationCommandOptionType, ApplicationCommandType, BaseChannel, BaseInteraction, ChatInputCommandInteraction, CommandInteraction, Events, GuildChannel, Interaction, NonThreadGuildBasedChannel } from "discord.js";
+import { benchmark } from "../data/benchmark.json";
+import constants from "../utils/constants";
+import { splitTextIntoChunks } from "../utils/strings";
+import AI from "../ai/AI";
+import { isNoMistakesSequence, isThereAnyRelevantCorrection, containsTheExactUserInput } from "../utils/spellscord-responses-management";
 
 export default {
     name: "debug",
     description: "Debug tools for developers",
     options: [
         {
-            name: "ticket",
-            description: "Test for tickets",
+            name: "prompt",
+            description: "Test for prompts",
             type: ApplicationCommandOptionType.SubcommandGroup,
             options: [
                 {
-                    name: "embeds",
-                    description: "Test tickets embed handling",
+                    name: "benchmark",
+                    description: "Run a benchmark to test the current prompt",
                     type: ApplicationCommandOptionType.Subcommand,
-                    options: [
-                        {
-                            name: "channel",
-                            description: "Channel where the embed is located",
-                            type: ApplicationCommandOptionType.Channel,
-                            required: false,
-                        }
-                    ],
                     execute: async (interaction: ChatInputCommandInteraction) => {
-                        const messages          = await interaction.channel?.messages.fetch();
-                        const firstMessage      = messages?.last();
-                        const embeds            = firstMessage?.embeds;
-
-                        if (!embeds) {
-                            await interaction.reply({ content: "No embeds found", ephemeral: true });
-                            return;
+                        if (!interaction.channel) return;
+                        await interaction.channel.send("# Benchmark start:");
+                        for (let test of benchmark) {
+                            await interaction.channel.send("## User Input:");
+                            const userInputChunks: string[] = splitTextIntoChunks(test.userInput, constants.MAX_MESSAGE_LENGTH);
+                            for (const chunk of userInputChunks) {
+                                await interaction.channel.send(chunk);
+                            }
+                            
+                            interaction.channel.send("## Spellscord answer:");
+                            const response = (await AI.generate(test.userInput));
+                            if (isNoMistakesSequence(response) || !isThereAnyRelevantCorrection(test.userInput, response) || containsTheExactUserInput(test.userInput, response)) {
+                                await interaction.channel.send("[No mistakes]");
+                            } else {
+                                const responseChunks: string[] = splitTextIntoChunks(response, constants.MAX_MESSAGE_LENGTH);
+                                for (const chunk of responseChunks) {
+                                    await interaction.channel.send(chunk);
+                                }
+                            }
+                            
+                            await interaction.channel.send("## -------------------");
                         }
+                        await interaction.channel.send("# Benchmark end");
+                        // const messages          = await interaction.channel?.messages.fetch();
+                        // const firstMessage      = messages?.last();
+                        // const embeds            = firstMessage?.embeds;
 
-                        const embedInfo         = embeds[0]?.description;
-                        const infoMatch         = embedInfo?.match(/(?<=\*\*Nombre de fois réclamé:\*\* )\d+/);
-                        const author            = embedInfo?.match(/(?<=\*\*Créé par:\*\* )<@\d+>/);
+                        // if (!embeds) {
+                        //     await interaction.reply({ content: "No embeds found", ephemeral: true });
+                        //     return;
+                        // }
 
-                        if(!infoMatch){
-                            await interaction.reply({ content: "Count number not found", ephemeral: true })
-                            return;
-                        }
+                        // const embedInfo         = embeds[0]?.description;
+                        // const infoMatch         = embedInfo?.match(/(?<=\*\*Nombre de fois réclamé:\*\* )\d+/);
+                        // const author            = embedInfo?.match(/(?<=\*\*Créé par:\*\* )<@\d+>/);
 
-                        const infoValue         = parseInt(infoMatch[0]);
+                        // if(!infoMatch){
+                        //     await interaction.reply({ content: "Count number not found", ephemeral: true })
+                        //     return;
+                        // }
 
-                        const embedDescription  = embeds[1]?.description;
-                        const descriptionMatch  = embedDescription?.match(/```(.*?)```/s);
-                        const descriptionValue  = descriptionMatch ? descriptionMatch[1] : null;
+                        // const infoValue         = parseInt(infoMatch[0]);
 
-                        await interaction.reply({ content: `Count: ${infoValue}\nDescription: ${descriptionValue}\nAuthor: ${author}`, ephemeral: true });
-                    }
-                },
-                {
-                    name: "check",
-                    description: "Check if a channel is a ticket",
-                    type: ApplicationCommandOptionType.Subcommand,
-                    options: [
-                        {
-                            name: "channel",
-                            description: "Channel to check",
-                            type: ApplicationCommandOptionType.Channel,
-                            required: false,
-                        }
-                    ],
-                    execute: async (interaction: ChatInputCommandInteraction) => {
-                        const messages          = await interaction.channel?.messages.fetch();
-                        const firstMessage      = messages?.last();
-                        const embeds            = firstMessage?.embeds;
+                        // const embedDescription  = embeds[1]?.description;
+                        // const descriptionMatch  = embedDescription?.match(/```(.*?)```/s);
+                        // const descriptionValue  = descriptionMatch ? descriptionMatch[1] : null;
 
-                        if (!embeds) {
-                            await interaction.reply({ content: "No embeds found", ephemeral: true });
-                            return;
-                        }
-
-                        const embedToCheck       = embeds[0]?.title;
-                        interaction.reply({ content: `Channel is a ticket: ${embedToCheck?.includes("Besoin d'aide")}`, ephemeral: true });
+                        // await interaction.reply({ content: `Count: ${infoValue}\nDescription: ${descriptionValue}\nAuthor: ${author}`, ephemeral: true });
                     }
                 }
             ]

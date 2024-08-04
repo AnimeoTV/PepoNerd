@@ -3,7 +3,7 @@ import { ChannelType, Client, Message, ThreadAutoArchiveDuration } from "discord
 import { splitTextIntoChunks } from "../utils/strings";
 import { isGuildTextThreadManager, isThreadable } from "../types/discordjs-typeguards";
 import constants from "../utils/constants";
-import { clearContextMessage, messagesCountToIgnore } from "../../config.json";
+import { messagesCountToIgnore } from "../../config.json";
 import { beautifyResponse, containsTheExactUserInput, isNoMistakesSequence, isThereAnyRelevantCorrection } from "../utils/spellscord-responses-management";
 
 
@@ -15,8 +15,8 @@ export default {
     once: false, // Set to true for a one-time execution
     async execute(message: Message, client: Client): Promise<void> {
         
-        // Ignore messages from bots or those mentioning everyone
-        if (message.author.bot || message.mentions.everyone) return;
+        // Ignore messages from bots
+        if (message.author.bot) return;
 
         // Check if the Discord client is ready (user object exists)
         if (client.user === null) {
@@ -42,6 +42,7 @@ export default {
             const header = `<@${message.author.id}> 🗣️ https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}\n`;
             const finalOutput = header + beautifyResponse(response);
             
+            // ensure we can create a private thread in the current channel
             if (isThreadable(message.channel) && isGuildTextThreadManager(message.channel.threads)) {
                 const thread = await message.channel.threads.create({
                     name: "Hum... Actually☝️🤓",
@@ -53,7 +54,7 @@ export default {
                 // Make sure to not send a message that exceeds discord's message length limit
                 const responseChunks: string[] = splitTextIntoChunks(finalOutput, constants.MAX_MESSAGE_LENGTH);
                 for (const chunk of responseChunks) {
-                    thread.send(chunk);
+                    await thread.send(chunk);
                 }
             }
         } catch (error) {

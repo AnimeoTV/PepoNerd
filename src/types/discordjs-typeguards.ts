@@ -6,5 +6,5 @@ export function isThreadable(obj: GuildTextBasedChannel | GuildBasedChannel | Te
 }
 
 export function isGuildTextThreadManager(obj: GuildTextThreadManager<any>): obj is GuildTextThreadManager<AllowedThreadTypeForTextChannel> {
-    return (obj as GuildTextThreadManager<AllowedThreadTypeForTextChannel>).create !== undefined;
+    return (obj instanceof GuildTextThreadManager);
 }

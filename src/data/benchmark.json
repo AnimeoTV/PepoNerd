@@ -1,0 +1,12 @@
+{
+    "benchmark": [
+        {
+            "userInput": "Ceci est un test pour le benchmark",
+            "expect": 0
+        },
+        {
+            "userInput": "Il faux faire de la frustration d'hier notre motivation d'aujourdui",
+            "expect": 1
+        }
+    ]
+}
