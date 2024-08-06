@@ -24,7 +24,7 @@ export function isNoMistakesSequence(response: string): boolean {
 }
 
 function clearString(str: string) {
-    const UNNECESSARY_CHAR = [" ", "\n", "\r", ".", "!", "?", "…", ",", ";", ":", "'", "/"];
+    const UNNECESSARY_CHAR = [" ", "\n", "\r", ".", "!", "?", "…", ",", ";", ":", "'", "/", "-"];
     let output = str.toLowerCase();
     // remove all unnecessary char form the text
     for (let char of UNNECESSARY_CHAR) {
@@ -65,11 +65,12 @@ export function parseResponse(response: string): Array<string> {
 }
 
 export function beautifyResponse(response: string): string {
-    const parsedResponse = parseResponse(response);
-    const explanations = parsedResponse[1];
-    const messageBody = parsedResponse[0];
+    // const parsedResponse = parseResponse(response);
+    // const explanations = parsedResponse[1];
+    // const messageBody = parsedResponse[0];
 
-    const output = (messageBody ? messageBodyDelimiter + "```" + messageBody + "```\n" : "") + (explanations ? explanationDelimiter + explanations : "") + (endDisclaimer ? "\n-# " + endDisclaimer : "");
+    // const output = (messageBody ? messageBodyDelimiter + "```" + messageBody + "```\n" : "") + (explanations ? explanationDelimiter + explanations : "") + (endDisclaimer ? "\n-# " + endDisclaimer : "");
+    const output = (response ? messageBodyDelimiter + "```" + response + "```\n" : "")
     return output;
 }
 
