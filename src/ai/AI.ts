@@ -24,7 +24,6 @@ async function getModels(): Promise<ExtendedModelList> {
 // Ensure the models are active (usable with Groq's API)
 const supportedModels: Array<ExtendedModel> = [];
 getModels().then((models) => {
-    console.log("getModels ~ models:", models)
     const availableModels: Array<ExtendedModel> = models.data ?? [];
     for (let modelID of supportedModelsID) {
         const availableModel = availableModels.find(availableModel => availableModel.id === modelID);
@@ -64,7 +63,7 @@ async function getGroqChatCompletion(input: string, model: string): Promise<Groq
         },
         {
             role    : "user",
-            content : input,
+            content : `Texte à corriger :\n${input}`,
         }
     ];
 

@@ -1,5 +1,5 @@
 import AI from "../ai/AI";
-import { ChannelType, Client, EmbedBuilder, Message, ThreadAutoArchiveDuration } from "discord.js";
+import { ActionRowBuilder, APIActionRowComponent, APIMessageActionRowComponent, ButtonBuilder, ButtonStyle, ChannelType, Client, EmbedBuilder, Message, ThreadAutoArchiveDuration } from "discord.js";
 import { splitTextIntoChunks } from "../utils/strings";
 import { isGuildTextThreadManager, isThreadable } from "../types/discordjs-typeguards";
 import constants from "../utils/constants";
@@ -37,8 +37,9 @@ export default {
 
             // Generate AI response using user input
             const response = (await AI.generate(userInput));
-            
-            if (isNoMistakesSequence(response) || !isThereAnyRelevantCorrection(userInput, response) || containsTheExactUserInput(userInput, response)) {
+
+            if (isNoMistakesSequence(response) || !isThereAnyRelevantCorrection(userInput, response)) {
+                // || containsTheExactUserInput(userInput, response)
                 console.log("The user's message has been considered valid");
                 return;
             }
@@ -49,6 +50,24 @@ export default {
                 .setTitle("**Explications** :") // explanationDelimiter
                 .setDescription(parsedResponse[1] ?? "Aucune explication n'a été fournie.")
                 .setFooter({ text: endDisclaimer, iconURL: "https://i.imgur.com/bQdDRAm.png" });
+
+            const MobileCopy = new ButtonBuilder()
+                .setLabel("Copier")
+                .setURL(`https://text2clipboard.netlify.app/?text=${encodeURIComponent(parsedResponse[0] ?? "")}`)
+                .setStyle(ButtonStyle.Link);
+
+            const ArchiveThread = new ButtonBuilder()
+                .setCustomId("archive-thread")
+                .setLabel("Archiver le thread")
+                .setStyle(ButtonStyle.Secondary);
+
+            const DeleteThread = new ButtonBuilder()
+                .setCustomId("delete-thread")
+                .setLabel("Supprimer le thread")
+                .setStyle(ButtonStyle.Danger);
+            
+            const row: unknown = new ActionRowBuilder()
+                .addComponents(MobileCopy, ArchiveThread, DeleteThread);
 
 
             const header = `<@${message.author.id}> 🗣️ https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}\n`;
@@ -73,8 +92,19 @@ export default {
                 // Make sure to not send a message that exceeds discord's message length limit
                 const responseChunks: string[] = splitTextIntoChunks(finalOutput, constants.MAX_MESSAGE_LENGTH);
                 for (let i = 0; i < responseChunks.length; i++) {
-                    await thread.send({ content: responseChunks[i], embeds: (i === responseChunks.length-1 ? [explanationEmbed] : []) });
+                    await thread.send({
+                        content: responseChunks[i],
+                        embeds: (i === responseChunks.length-1 ? [explanationEmbed] : []),
+                        components: [row as APIActionRowComponent<APIMessageActionRowComponent>]
+                    });
                 }
+
+                // delete the thread after 5 minutes
+                setTimeout(()=> {
+                    try {
+                        thread.delete();
+                    } catch (err) {/* fail silently pls */}
+                }, 300_000);
             }
         } catch (error) {
             
