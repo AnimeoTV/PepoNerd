@@ -27,6 +27,7 @@ export default {
 
         // Extract user input from message
         const userInput = message.content;
+        if (!userInput) return;
         
         try {
             // Log user input
