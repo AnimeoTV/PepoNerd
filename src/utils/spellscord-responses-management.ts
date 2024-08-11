@@ -4,11 +4,15 @@ import { localization, endDisclaimer } from "../../config.json";
 
 // import localized no mistakes sequence + explanation & message body delimiter
 let noMistakesSequences: string = "";
+let startMessageSequences: string = "";
 let explanationDelimiters: string = "";
 let messageBodyDelimiter: string = "";
 loadTranslations(localization).then((translation) => {
     if (translation?.noMistakesSequences) {
         noMistakesSequences = translation.noMistakesSequences;
+    }
+    if (translation?.startMessageSequences) {
+        startMessageSequences = translation.startMessageSequences;
     }
     if (translation?.explanationDelimiters) {
         explanationDelimiters = translation.explanationDelimiters;
@@ -25,13 +29,21 @@ export function isNoMistakesSequence(response: string): boolean {
             return true;
         }
     }
-    
+
     return false;
+}
+export function trimStartMessageSequence(response: string): string {
+    for (let startMessageSequence of startMessageSequences) {
+        if (response.startsWith(startMessageSequence)) {
+            return response.slice(startMessageSequence.length);
+        }
+    }
+    return response;
 }
 
 function clearString(str: string) {
     const UNNECESSARY_CHAR = [
-        " ", " ", " "," ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "　",
+        " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", "　",
         "\n", "\r", ".", "!", "?", "…", ",", ";", ":", "'", "/", "\\",
         "-", "—", "–", "\"", "«", "»", "“", "”", "‘", "’"];
     let output = str.toLowerCase().trim();
@@ -68,8 +80,8 @@ export function parseResponse(response: string): Array<string> {
         }
         messageBody = response;
     }
-    
-    return [messageBody, explanations]; 
+
+    return [messageBody, explanations];
 }
 
 export function beautifyResponse(response: string): string {

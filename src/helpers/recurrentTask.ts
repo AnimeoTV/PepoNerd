@@ -5,16 +5,16 @@ import { getOutdatedThreads, untrackThread } from "../utils/database"
 config();
 const GUILD_ID = process.env["GUILD_ID"] as string;
 
-export function handleOutdatedThreads(client: Client) {
-    const guild = client.guilds.cache.get(GUILD_ID);
+export async function handleOutdatedThreads(client: Client) {
+    const guild = await client.guilds.fetch(GUILD_ID);
     if (!guild) {
         console.error("No server found")
         return;
     }
-    setInterval(() => {
+    setInterval(async () => {
         const outdatedThreads = getOutdatedThreads();
         for (let outdatedThread of outdatedThreads) {
-            const threadChannel = guild.channels.cache.get(outdatedThread.thread_id);
+            const threadChannel = await guild.channels.fetch(outdatedThread.thread_id);
             untrackThread(outdatedThread.thread_id);
             if (threadChannel) {
                 threadChannel.delete()

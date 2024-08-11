@@ -4,7 +4,7 @@ import { splitTextIntoChunks } from "../utils/strings";
 import { isGuildTextThreadManager, isThreadable } from "../types/discordjs-typeguards";
 import constants from "../utils/constants";
 import { messagesCountToIgnore, endDisclaimer } from "../../config.json";
-import { beautifyResponse, containsTheExactUserInput, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse } from "../utils/spellscord-responses-management";
+import { beautifyResponse, containsTheExactUserInput, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/spellscord-responses-management";
 import { addPrivateThread, addUser, db } from "../utils/database";
 
 
@@ -33,13 +33,12 @@ export default {
             // Log user input
             console.log(`\n===== INPUT MESSAGE\n${userInput}\n`);
             if (!message.guild) return;
+
             const member = message.guild.members.cache.get(message.author.id);
-            // console.log("member:", member);
-            // console.log("USER PRESENCE:", member?.presence);
             addUser(message.author.id, member?.displayName ?? message.author.globalName ?? message.author.username)
             
             // Generate AI response using user input
-            const response = (await AI.generate(userInput));
+            const response = trimStartMessageSequence(await AI.generate(userInput));
 
             if (isNoMistakesSequence(response) || !isThereAnyRelevantCorrection(userInput, response)) {
                 // || containsTheExactUserInput(userInput, response)
@@ -51,7 +50,7 @@ export default {
             
             const explanationEmbed = new EmbedBuilder()
                 .setColor(0x5a8c3f)
-                .setTitle("**Explications** :") // explanationDelimiter
+                .setTitle("**Explications** :") //TODO: explanationDelimiter
                 .setDescription(parsedResponse[1] || "Aucune explication n'a été fournie.")
                 .setFooter({ text: endDisclaimer, iconURL: "https://i.imgur.com/bQdDRAm.png" });
 
@@ -82,36 +81,24 @@ export default {
                 const thread = await message.channel.threads.create({
                     name: "Hum... Actually☝️🤓",
                     type: ChannelType.PrivateThread,
-                    autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
+                    autoArchiveDuration: ThreadAutoArchiveDuration.ThreeDays,
                     reason: "Needed a separate and private thread so as to not disclose to everyone the user's mistakes",
                 });
                 try {
                     addPrivateThread(thread.id, message.author.id, thread.createdTimestamp ?? Date.now());
     
                     let finalOutput = "";
-                    if (true) { // dekstop
-                        finalOutput = header + beautifyResponse(parsedResponse[0] ?? "");
-                    } else { // mobile
-                        await thread.send(header);
-                        finalOutput = parsedResponse[0] ?? "[Erreur: aucun contenu n'a été fourni]";
-                    }
-    
+                    finalOutput = header + beautifyResponse(parsedResponse[0] ?? "");
+
                     // Make sure to not send a message that exceeds discord's message length limit
                     const responseChunks: string[] = splitTextIntoChunks(finalOutput, constants.MAX_MESSAGE_LENGTH);
                     for (let i = 0; i < responseChunks.length; i++) {
                         await thread.send({
-                            content: responseChunks[i],
+                            content: (responseChunks.length > 1 ? (i === 0 ? responseChunks[i] + "```" : (i === responseChunks.length-1 ? "```" + responseChunks[i] : ("```" + responseChunks[i] + "```"))) : responseChunks[i]),
                             embeds: (i === responseChunks.length-1 ? [explanationEmbed] : []),
-                            components: [row as APIActionRowComponent<APIMessageActionRowComponent>]
+                            components: (i === responseChunks.length-1 ? [row as APIActionRowComponent<APIMessageActionRowComponent>] : [])
                         });
                     }
-    
-                    // delete the thread after 5 minutes
-                    // setTimeout(()=> {
-                    //     try {
-                    //         thread.delete();
-                    //     } catch (err) {/* fail silently pls */}
-                    // }, 300_000);
                 } catch (error) {
                     thread.delete();
                     console.error("Error sending response:", error);

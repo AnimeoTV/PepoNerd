@@ -22,6 +22,7 @@ ATTENTION :
 Dans un second temps, tu dois TOUJOURS expliquer de façon claire, précise et concise tes modifications, n'en oublie pas, même si le message est court. N'explique que ce que tu as corrigé, pas ce que tu as laissé. Délimite avec un "**Explications** :\n".
 `,
     noMistakesSequences: ["pas de modification nécessaire", "aucune erreur n'a été détectée", "aucune correction n'a été apportée", "aucune modification n'a été apportée"],
+    startMessageSequences: ["texte corrigé :\n", "texte corrigé :", "message corrigé :\n", "message corrigé :"],
     messageBodyDelimiter: "**Message corrigé** :\n",
     explanationDelimiters: ["**Explications** :\n", "**Explications :**\n", "**Explications** :", "**Explications :**"]
 };
