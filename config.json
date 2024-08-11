@@ -29,5 +29,5 @@
     ],
 
     "description": "The text that will be append at the end of the message",
-    "endDisclaimer": "Important: Spellscord can make mistakes. Consider checking text diff before editing your message."
+    "endDisclaimer": "Important: Spellscord can make mistakes. Consider checking text diff before editing your message. This message will self-delete within 5 minutes."
 }

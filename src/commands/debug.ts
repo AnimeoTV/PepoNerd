@@ -31,7 +31,7 @@ export default {
                             
                             interaction.channel.send("## Spellscord answer:");
                             const response = (await AI.generate(test.userInput));
-                            if (isNoMistakesSequence(response) || !isThereAnyRelevantCorrection(test.userInput, response) || containsTheExactUserInput(test.userInput, response)) {
+                            if (isNoMistakesSequence(response) || !isThereAnyRelevantCorrection(test.userInput, response)) {
                                 await interaction.channel.send("[No mistakes]");
                             } else {
                                 const responseChunks: string[] = splitTextIntoChunks(response, constants.MAX_MESSAGE_LENGTH);

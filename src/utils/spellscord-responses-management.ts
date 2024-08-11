@@ -4,14 +4,14 @@ import { localization, endDisclaimer } from "../../config.json";
 
 // import localized no mistakes sequence + explanation & message body delimiter
 let noMistakesSequences: string = "";
-let explanationDelimiter: string = "";
+let explanationDelimiters: string = "";
 let messageBodyDelimiter: string = "";
 loadTranslations(localization).then((translation) => {
     if (translation?.noMistakesSequences) {
         noMistakesSequences = translation.noMistakesSequences;
     }
-    if (translation?.explanationDelimiter) {
-        explanationDelimiter = translation.explanationDelimiter;
+    if (translation?.explanationDelimiters) {
+        explanationDelimiters = translation.explanationDelimiters;
     }
     if (translation?.messageBodyDelimiter) {
         messageBodyDelimiter = translation.messageBodyDelimiter;
@@ -21,7 +21,7 @@ loadTranslations(localization).then((translation) => {
 export function isNoMistakesSequence(response: string): boolean {
     const parsedResponse = parseResponse(response);
     for (let noMistakesSequence of noMistakesSequences) {
-        if (response.trim() === noMistakesSequence.trim() || parsedResponse[1]?.trim().toLowerCase().includes(noMistakesSequence.trim().toLowerCase())) {
+        if (response.trim() === noMistakesSequence.trim() || (parsedResponse[1] && parsedResponse[1]?.trim().toLowerCase().includes(noMistakesSequence.trim().toLowerCase()))) {
             return true;
         }
     }
@@ -57,18 +57,17 @@ export function containsnoMistakesSequences(response: string): boolean {
 }
 
 export function parseResponse(response: string): Array<string> {
-    let parsedResponse = response.split(explanationDelimiter);
     let explanations = "";
-    if (parsedResponse.length > 1) {
-        explanations = parsedResponse.pop()?.trim() ?? "";
-    } else {
-        // often struggle with short message and write everything inline
-        parsedResponse = response.split(explanationDelimiter.trim());
+    let messageBody = "";
+    for (let explanationDelimiter of explanationDelimiters) {
+        let parsedResponse = response.split(explanationDelimiter);
         if (parsedResponse.length > 1) {
             explanations = parsedResponse.pop()?.trim() ?? "";
+            messageBody = parsedResponse.join(explanationDelimiter).trim();
+            break;
         }
+        messageBody = response;
     }
-    const messageBody = parsedResponse.join(explanationDelimiter).trim();
     
     return [messageBody, explanations]; 
 }

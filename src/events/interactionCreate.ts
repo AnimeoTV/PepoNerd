@@ -8,18 +8,18 @@ export default {
     once: false,
     async execute(interaction: ChatInputCommandInteraction, client:Client, commands: any[]) {
         // Check if the interaction is a chat input command
-        if (!interaction.isCommand()) return;
-
-        // Find the matching command from the provided commands array
-        const commandsFound = commands.find(command => command.name === interaction.commandName);
-        
-        // If a matching command is found, traverse and execute it
-        if (commandsFound) {
-            traverseAndExecute(commandsFound, interaction);
-        } else {
-            // Handle the case where no matching command is found (optional)
-            console.warn(`Command "${interaction.commandName}" not found.`);
-        }
+        if (interaction.isCommand()) {
+            // Find the matching command from the provided commands array
+            const commandsFound = commands.find(command => command.name === interaction.commandName);
+            
+            // If a matching command is found, traverse and execute it
+            if (commandsFound) {
+                traverseAndExecute(commandsFound, interaction);
+            } else {
+                // Handle the case where no matching command is found (optional)
+                console.warn(`Command "${interaction.commandName}" not found.`);
+            }
+        } 
     },
 }
 

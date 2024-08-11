@@ -13,7 +13,6 @@ const client:Client     = new Client({ intents: ["Guilds", "GuildMessages", "Mes
 const handler:Handler   = Handler.getInstance();
 
 (async () => {
-    
     // Load and register events asynchronously
     await handler.handleEvents(client, path.join(__dirname, "events"));
     
