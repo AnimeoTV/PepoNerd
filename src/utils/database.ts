@@ -5,10 +5,9 @@ import { Snowflake } from "discord.js";
 import path from "path";
 import { isHallOfShameArray, isThreadsArray } from "../types/spellscord-typeguards";
 
-const dbPath = path.join(__dirname, '../data/database.db');
+const dbPath = path.join(__dirname, "../data/database.db");
 
 const db = new Database(dbPath, { verbose: console.log });
-console.log("db initialiazed")
 
 db.prepare(`
     CREATE TABLE IF NOT EXISTS users (
@@ -31,16 +30,13 @@ db.prepare(`
         FOREIGN KEY (user_id) REFERENCES users(user_id)
     )
 `).run();
-// db.prepare(`
-//     CREATE TABLE IF NOT EXISTS stfu (
-//         user_id TEXT PRIMARY KEY,
-//         timestamp INTEGER,
-//         duration INTEGER DEFAULT 3600,
-//         FOREIGN KEY (user_id) REFERENCES users(user_id)
-//     )
-// `).run();
-
-console.log("tables initialiazed")
+db.prepare(`
+    CREATE TABLE IF NOT EXISTS stfu (
+        user_id TEXT PRIMARY KEY,
+        stfu_end_timestamp INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    )
+`).run();
 
 export {
     db
@@ -48,19 +44,19 @@ export {
 
 // setters
 export function addUser(userId: Snowflake, displayName: string) {
-    const stmt = db.prepare('INSERT OR REPLACE INTO users (user_id, username) VALUES (?, ?)');
+    const stmt = db.prepare("INSERT OR REPLACE INTO users (user_id, username) VALUES (?, ?)");
     stmt.run(userId, displayName);
 }
 
 export function addPrivateThread(threaId: Snowflake, ownerId: Snowflake, timestamp: Number) {
-    const stmt = db.prepare('INSERT OR REPLACE INTO threads (thread_id, user_id, timestamp) VALUES (?, ?, ?)');
+    const stmt = db.prepare("INSERT OR REPLACE INTO threads (thread_id, user_id, timestamp) VALUES (?, ?, ?)");
     stmt.run(threaId, ownerId, timestamp);
 }
 
 export function incrementBullyCounter(userId: Snowflake): void {
-    const getUserQuery = 'SELECT COUNT(*) AS count FROM hall_of_shame WHERE user_id = ?';
-    const incrementUserQuery = 'UPDATE hall_of_shame SET bully_count = bully_count + 1 WHERE user_id = ?';
-    const insertUserQuery = 'INSERT INTO hall_of_shame (user_id, bully_count) VALUES (?, 1)';
+    const getUserQuery = "SELECT COUNT(*) AS count FROM hall_of_shame WHERE user_id = ?";
+    const incrementUserQuery = "UPDATE hall_of_shame SET bully_count = bully_count + 1 WHERE user_id = ?";
+    const insertUserQuery = "INSERT INTO hall_of_shame (user_id, bully_count) VALUES (?, 1)";
 
     const userCheck: any = db.prepare(getUserQuery).get(userId);
     console.log("userCheck:", userCheck)
@@ -76,7 +72,7 @@ export function incrementBullyCounter(userId: Snowflake): void {
 
 
 export function untrackThread(threadId: Snowflake): boolean {
-    const stmt = db.prepare('DELETE FROM threads WHERE thread_id = ?');
+    const stmt = db.prepare("DELETE FROM threads WHERE thread_id = ?");
 
     const info = stmt.run(threadId);
 
@@ -85,6 +81,13 @@ export function untrackThread(threadId: Snowflake): boolean {
     } else {
         return false;
     }
+}
+
+export function addSTFU(userId: Snowflake, duration: number) {
+    const stmt = db.prepare("INSERT OR REPLACE INTO stfu (user_id, stfu_end_timestamp) VALUES (?, ?)");
+    const now = Date.now();
+    const endTimestamp = Math.floor(now + duration*3600*1000);
+    stmt.run(userId, endTimestamp);
 }
 
 // getters
@@ -115,11 +118,29 @@ export function getUsername(userId: Snowflake | undefined): string | undefined {
 export function getOutdatedThreads(): Array<Thread> {
     const fiveMinutesAgo = Date.now() - 5*60*1000; // TODO: config
 
-    const stmt = db.prepare('SELECT * FROM threads WHERE timestamp < ?');
+    const stmt = db.prepare("SELECT * FROM threads WHERE timestamp < ?");
     const threads = stmt.all(fiveMinutesAgo);
     if (isThreadsArray(threads)) {
         return threads;
     }
 
     return [];
+}
+
+export function getThreads(): Array<Thread> {
+    const stmt = db.prepare("SELECT * FROM threads");
+    const threads = stmt.all();
+    if (isThreadsArray(threads)) {
+        return threads;
+    }
+
+    return [];
+}
+
+export function isSTFUed(userId: Snowflake): boolean {
+    const stmt = db.prepare("DELETE FROM stfu WHERE stfu_end_timestamp < ?");
+    stmt.run(Date.now());
+    const stmt2 = db.prepare("SELECT COUNT(*) AS count FROM stfu WHERE user_id = ?");
+    const stfu: any = stmt2.get(userId);
+    return (stfu.count > 0);
 }

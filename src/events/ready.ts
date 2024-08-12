@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { handleOutdatedThreads } from "../helpers/recurrentTask";
+import { handleOutdatedThreads } from "../helpers/outdatedThreadsHandler";
 
 /**
  * This event listener handles the "ready" event emitted by the Discord client.
@@ -10,6 +10,6 @@ export default {
     execute(client: Client) {
         // Log a message upon successful login
         console.log(`Logged in as ${client.user?.username} !`);
-        handleOutdatedThreads(client); // starts a recurrent task
+        handleOutdatedThreads(client); // delete old threads
     },
 }

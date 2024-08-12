@@ -5,7 +5,7 @@ import { isGuildTextThreadManager, isThreadable } from "../types/discordjs-typeg
 import constants from "../utils/constants";
 import { messagesCountToIgnore, endDisclaimer } from "../../config.json";
 import { beautifyResponse, containsTheExactUserInput, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/spellscord-responses-management";
-import { addPrivateThread, addUser, db } from "../utils/database";
+import { addPrivateThread, addUser, db, isSTFUed, untrackThread } from "../utils/database";
 
 
 /**
@@ -18,6 +18,9 @@ export default {
         
         // Ignore messages from bots or sent in threads
         if (message.author.bot || message.channel.isThread()) return;
+
+        // ignore STFU and whitelisted
+        if (isSTFUed(message.author.id)) return;
         
         // Check if the Discord client is ready (user object exists)
         if (client.user === null) {
@@ -99,6 +102,12 @@ export default {
                             components: (i === responseChunks.length-1 ? [row as APIActionRowComponent<APIMessageActionRowComponent>] : [])
                         });
                     }
+                    setTimeout(() => {
+                        untrackThread(thread.id);
+                        thread.delete()
+                            .then(() => console.log(`Thread ${thread.id} successfully deleted`))
+                            .catch(console.error)
+                    }, 5*60*1000); // 5 minutes ; TODO: config
                 } catch (error) {
                     thread.delete();
                     console.error("Error sending response:", error);
