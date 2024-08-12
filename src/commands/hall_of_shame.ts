@@ -26,7 +26,7 @@ export default {
                         const embed = new EmbedBuilder()
                             .setColor(0x5a8c3f)
                             .setTitle("Hall of Shame - Top bulliers")
-                            .setDescription(hallOfShame.join("\n")); // TODO: translation
+                            .setDescription(hallOfShame.join("\n") || "Personne n'a encore bully Pepo Nerd, merci pour lui ^^"); // TODO: translation
                         
                         await interaction.reply({
                             embeds: [embed],
