@@ -6,6 +6,36 @@ import constants from "../utils/constants";
 import { messagesCountToIgnore, endDisclaimer } from "../../config.json";
 import { beautifyResponse, generateDiff, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/spellscord-responses-management";
 import { addPrivateThread, addUser, isSTFUed, untrackThread } from "../utils/database";
+import { loadTranslations } from "../utils/localization";
+import { localization } from "../../config.json";
+
+
+let explanationBeautifier: string = "";
+let noExplanationProvided: string = "";
+let copyButtonLabel: string = "";
+let sendRawButtonLabel: string = "";
+let archiveThreadButtonLabel: string = "";
+let deleteThreadButtonLabel: string = "";
+loadTranslations(localization).then((translation) => {
+    if (translation?.explanationBeautifier) {
+        explanationBeautifier = translation.explanationBeautifier;
+    }
+    if (translation?.noExplanationProvided) {
+        noExplanationProvided = translation.noExplanationProvided;
+    }
+    if (translation?.copyButtonLabel) {
+        copyButtonLabel = translation.copyButtonLabel;
+    }
+    if (translation?.sendRawButtonLabel) {
+        sendRawButtonLabel = translation.sendRawButtonLabel;
+    }
+    if (translation?.archiveThreadButtonLabel) {
+        archiveThreadButtonLabel = translation.archiveThreadButtonLabel;
+    }
+    if (translation?.deleteThreadButtonLabel) {
+        deleteThreadButtonLabel = translation.deleteThreadButtonLabel;
+    }
+});
 
 
 /**
@@ -53,31 +83,31 @@ export default {
             const diff = generateDiff(parseResponse(userInput)[0] ?? "", parsedResponse[0] ?? "");
 
             const explanationEmbed = new EmbedBuilder()
-                .setColor(0x5a8c3f) //TODO: translation
-                .setDescription((diff && ("### Text diff\n" + diff + "\n" +  "-# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n### Explications\n")) + (parsedResponse[1] || "Aucune explication n'a été fournie."))
+                .setColor(0x5a8c3f)
+                .setDescription((diff && ("### Text diff\n" + diff + "\n" +  "-# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n" + explanationBeautifier)) + (parsedResponse[1] || noExplanationProvided))
                 .setFooter({ text: endDisclaimer, iconURL: "https://i.imgur.com/bQdDRAm.png" });
 
             const txt2clipboardURL = `https://text2clipboard.netlify.app/?text=${encodeURIComponent(parsedResponse[0] ?? "")}`;
             const MobileCopy = new ButtonBuilder()
-                .setLabel("Copier")
+                .setLabel(copyButtonLabel)
                 // check out https://github.com/Truiteseche/text2clipboard
-                .setURL(txt2clipboardURL.slice(0, 500))
+                .setURL(txt2clipboardURL.slice(0, 512))
                 .setStyle(ButtonStyle.Link)
-                .setDisabled(!parsedResponse[0] || txt2clipboardURL !== txt2clipboardURL.slice(0, 500));
+                .setDisabled(!parsedResponse[0] || txt2clipboardURL !== txt2clipboardURL.slice(0, 512));
 
             const sendRaw = new ButtonBuilder()
                 .setCustomId("send-raw")
-                .setLabel("Obtenir le texte brut") // TODO: translation
+                .setLabel(sendRawButtonLabel) // TODO: translation
                 .setStyle(ButtonStyle.Secondary);
 
             const ArchiveThread = new ButtonBuilder()
                 .setCustomId("archive-thread")
-                .setLabel("Archiver le thread")
+                .setLabel(archiveThreadButtonLabel)
                 .setStyle(ButtonStyle.Secondary);
 
             const DeleteThread = new ButtonBuilder()
                 .setCustomId("delete-thread")
-                .setLabel("Supprimer le thread")
+                .setLabel(deleteThreadButtonLabel)
                 .setStyle(ButtonStyle.Danger);
 
             const row: unknown = new ActionRowBuilder()

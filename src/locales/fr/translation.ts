@@ -23,8 +23,19 @@ Dans un second temps, tu dois TOUJOURS expliquer de façon claire, précise et c
 `,
     noMistakesSequences: ["pas de modification nécessaire", "aucune erreur n'a été détectée", "aucune correction n'a été apportée", "aucune modification n'a été apportée"],
     startMessageSequences: ["texte corrigé :\n", "texte corrigé :", "message corrigé :\n", "message corrigé :"],
-    messageBodyDelimiter: "**Message corrigé** :\n",
-    explanationDelimiters: ["**Explications** :\n", "**Explications :**\n", "**Explications** :", "**Explications :**"]
+    explanationDelimiters: ["**Explications** :\n", "**Explications :**\n", "**Explications** :", "**Explications :**"],
+    messageBodyBeautifier: "**Message corrigé** :\n",
+    explanationBeautifier: "### Explications\n",
+    noExplanationProvided: "Aucune explication n'a été fournie.",
+    copyButtonLabel: "Copier",
+    sendRawButtonLabel: "Obtenir le texte brut",
+    archiveThreadButtonLabel: "Archiver le thread",
+    deleteThreadButtonLabel: "Supprimer le thread",
+    nobodyBullied: "Personne n'a encore bully Spellscord, merci pour lui ^^",
+    stfuSpellscord: "Vous avez envoyé Spellscord au coin pour %durationh.\n-# Note : cela ne s'applique qu'à vous",
+    stfuSpellscordComeback: "Spellscord est de retour pour vous servir <:pepo_nerd:1269678622583554119>\n-# Note : cela ne s'applique qu'à vous",
+    threadArchiveSuccess: "Thread archivé avec succès - il ne sera pas supprimé automatiquement.",
+    threadAlreadyArchived: "Le thread est déjà archivé."
 };
 
 

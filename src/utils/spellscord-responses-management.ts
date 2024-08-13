@@ -6,7 +6,7 @@ import { localization, endDisclaimer } from "../../config.json";
 let noMistakesSequences: string = "";
 let startMessageSequences: string = "";
 let explanationDelimiters: string = "";
-let messageBodyDelimiter: string = "";
+let messageBodyBeautifier: string = "";
 loadTranslations(localization).then((translation) => {
     if (translation?.noMistakesSequences) {
         noMistakesSequences = translation.noMistakesSequences;
@@ -17,8 +17,8 @@ loadTranslations(localization).then((translation) => {
     if (translation?.explanationDelimiters) {
         explanationDelimiters = translation.explanationDelimiters;
     }
-    if (translation?.messageBodyDelimiter) {
-        messageBodyDelimiter = translation.messageBodyDelimiter;
+    if (translation?.messageBodyBeautifier) {
+        messageBodyBeautifier = translation.messageBodyBeautifier;
     }
 });
 
@@ -85,18 +85,12 @@ export function parseResponse(response: string): Array<string> {
 }
 
 export function beautifyResponse(response: string): string {
-    // const parsedResponse = parseResponse(response);
-    // const explanations = parsedResponse[1];
-    // const messageBody = parsedResponse[0];
-
-    // const output = (messageBody ? messageBodyDelimiter + "```" + messageBody + "```\n" : "") + (explanations ? explanationDelimiter + explanations : "") + (endDisclaimer ? "\n-# " + endDisclaimer : "");
-    const output = (response ? messageBodyDelimiter + "```" + response + "```" : "")
+    const output = (response ? messageBodyBeautifier + "```" + response + "```" : "")
     return output;
 }
 
 
 function removeEmptyLines(text: string) {
-    // Utilise une expression régulière pour remplacer les lignes vides par une chaîne vide
     return text.replace(/^\s*[\r\n]/gm, '');
 }
 

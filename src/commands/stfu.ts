@@ -2,6 +2,21 @@
 import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
 import path from "path";
 import { addSTFU } from "../utils/database";
+import { loadTranslations } from "../utils/localization";
+import { localization } from "../../config.json";
+
+
+let stfuSpellscord: string = "";
+let stfuSpellscordComeback: string = "";
+loadTranslations(localization).then((translation) => {
+    if (translation?.stfuSpellscord) {
+        stfuSpellscord = translation.stfuSpellscord;
+    }
+    if (translation?.stfuSpellscordComeback) {
+        stfuSpellscordComeback = translation.stfuSpellscordComeback;
+    }
+});
+
 
 export default {
     name: "stfu",
@@ -23,12 +38,12 @@ export default {
                 const duration = interaction.options.getInteger("duration") ?? 1
                 addSTFU(interaction.user.id, duration);
                 let gifPath: string;
-                let message: string; // TODO: translation
+                let message: string;
                 if (duration === 0) {
-                    message = `Spellscord est de retour pour vous servir <:pepo_nerd:1269678622583554119>\n-# Note : cela ne s'applique qu'à vous`;
+                    message = stfuSpellscordComeback;
                     gifPath = path.join(__dirname, "../data/pepo-comfy.gif")
                 } else {
-                    message = `Vous avez envoyé Spellscord au coin pour ${duration}h.\n-# Note : cela ne s'applique qu'à vous`;
+                    message = stfuSpellscord.replace("%duration", duration.toString());
                     gifPath = path.join(__dirname, "../data/pepo-go-away.gif")
                 }
                 await interaction.reply({

@@ -2,6 +2,21 @@ import { ButtonInteraction, ChatInputCommandInteraction, Client, Collection, Emb
 import { untrackThread } from "../utils/database";
 import { splitTextIntoChunks, stripCodeBlocksBacksticks } from "../utils/strings";
 import constants from "../utils/constants";
+import { loadTranslations } from "../utils/localization";
+import { localization } from "../../config.json";
+
+
+let threadArchiveSuccess: string = "";
+let threadAlreadyArchived: string = "";
+loadTranslations(localization).then((translation) => {
+    if (translation?.threadArchiveSuccess) {
+        threadArchiveSuccess = translation.threadArchiveSuccess;
+    }
+    if (translation?.threadAlreadyArchived) {
+        threadAlreadyArchived = translation.threadAlreadyArchived;
+    }
+});
+
 
 /**
  * Event listener for handling chat input command interactions
@@ -40,7 +55,7 @@ export default {
                     const success = untrackThread(interaction.channelId);
                     const embed = new EmbedBuilder()
                         .setColor(0x5a8c3f)
-                        .setDescription(success ? "Thread archivé avec succès - il ne sera pas supprimé automatiquement." : "Le thread est déjà archivé.") // TODO: translation
+                        .setDescription(success ? threadArchiveSuccess : threadAlreadyArchived)
                     interaction.reply({
                         embeds: [embed]
                     })
