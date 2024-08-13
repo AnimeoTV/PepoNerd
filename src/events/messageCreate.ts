@@ -1,11 +1,11 @@
 import AI from "../ai/AI";
-import { ActionRowBuilder, APIActionRowComponent, APIMessageActionRowComponent, ButtonBuilder, ButtonStyle, ChannelType, Client, EmbedBuilder, Message, ThreadAutoArchiveDuration } from "discord.js";
+import { ActionRowBuilder, APIActionRowComponent, APIMessageActionRowComponent, ButtonBuilder, ButtonStyle, ChannelType, Client, EmbedBuilder, Message, Snowflake, ThreadAutoArchiveDuration } from "discord.js";
 import { splitTextIntoChunks } from "../utils/strings";
 import { isGuildTextThreadManager, isThreadable } from "../types/discordjs-typeguards";
 import constants from "../utils/constants";
 import { messagesCountToIgnore, endDisclaimer } from "../../config.json";
-import { beautifyResponse, containsTheExactUserInput, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/spellscord-responses-management";
-import { addPrivateThread, addUser, db, isSTFUed, untrackThread } from "../utils/database";
+import { beautifyResponse, generateDiff, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/spellscord-responses-management";
+import { addPrivateThread, addUser, isSTFUed, untrackThread } from "../utils/database";
 
 
 /**
@@ -15,13 +15,13 @@ export default {
     name: "messageCreate",
     once: false, // Set to true for a one-time execution
     async execute(message: Message, client: Client): Promise<void> {
-        
+
         // Ignore messages from bots or sent in threads
         if (message.author.bot || message.channel.isThread()) return;
 
         // ignore STFU and whitelisted
         if (isSTFUed(message.author.id)) return;
-        
+
         // Check if the Discord client is ready (user object exists)
         if (client.user === null) {
             void message.reply("I'm just getting started, so please wait.");
@@ -31,7 +31,7 @@ export default {
         // Extract user input from message
         const userInput = message.content;
         if (!userInput) return;
-        
+
         try {
             // Log user input
             console.log(`\n===== INPUT MESSAGE\n${userInput}\n`);
@@ -39,7 +39,7 @@ export default {
 
             const member = message.guild.members.cache.get(message.author.id);
             addUser(message.author.id, member?.displayName ?? message.author.globalName ?? message.author.username)
-            
+
             // Generate AI response using user input
             const response = trimStartMessageSequence(await AI.generate(userInput));
 
@@ -50,19 +50,25 @@ export default {
             }
 
             const parsedResponse = parseResponse(response);
-            
+            const diff = generateDiff(parseResponse(userInput)[0] ?? "", parsedResponse[0] ?? "");
+
             const explanationEmbed = new EmbedBuilder()
-                .setColor(0x5a8c3f)
-                .setTitle("**Explications** :") //TODO: explanationDelimiter
-                .setDescription(parsedResponse[1] || "Aucune explication n'a été fournie.")
+                .setColor(0x5a8c3f) //TODO: translation
+                .setDescription((diff && ("### Text diff\n" + diff + "\n" +  "-# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n### Explications\n")) + (parsedResponse[1] || "Aucune explication n'a été fournie."))
                 .setFooter({ text: endDisclaimer, iconURL: "https://i.imgur.com/bQdDRAm.png" });
 
+            const txt2clipboardURL = `https://text2clipboard.netlify.app/?text=${encodeURIComponent(parsedResponse[0] ?? "")}`;
             const MobileCopy = new ButtonBuilder()
                 .setLabel("Copier")
                 // check out https://github.com/Truiteseche/text2clipboard
-                .setURL(`https://text2clipboard.netlify.app/?text=${encodeURIComponent(parsedResponse[0] ?? "")}`.slice(0, 500))
+                .setURL(txt2clipboardURL.slice(0, 500))
                 .setStyle(ButtonStyle.Link)
-                .setDisabled(!parsedResponse[0]);
+                .setDisabled(!parsedResponse[0] || txt2clipboardURL !== txt2clipboardURL.slice(0, 500));
+
+            const sendRaw = new ButtonBuilder()
+                .setCustomId("send-raw")
+                .setLabel("Obtenir le texte brut") // TODO: translation
+                .setStyle(ButtonStyle.Secondary);
 
             const ArchiveThread = new ButtonBuilder()
                 .setCustomId("archive-thread")
@@ -73,9 +79,9 @@ export default {
                 .setCustomId("delete-thread")
                 .setLabel("Supprimer le thread")
                 .setStyle(ButtonStyle.Danger);
-            
+
             const row: unknown = new ActionRowBuilder()
-                .addComponents(MobileCopy, ArchiveThread, DeleteThread);
+                .addComponents(MobileCopy, sendRaw, ArchiveThread, DeleteThread);
 
             const header = `<@${message.author.id}> 🗣️ https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}\n`;
 
@@ -89,7 +95,7 @@ export default {
                 });
                 try {
                     addPrivateThread(thread.id, message.author.id, thread.createdTimestamp ?? Date.now());
-    
+
                     let finalOutput = "";
                     finalOutput = header + beautifyResponse(parsedResponse[0] ?? "");
 
@@ -97,17 +103,20 @@ export default {
                     const responseChunks: string[] = splitTextIntoChunks(finalOutput, constants.MAX_MESSAGE_LENGTH);
                     for (let i = 0; i < responseChunks.length; i++) {
                         await thread.send({
-                            content: (responseChunks.length > 1 ? (i === 0 ? responseChunks[i] + "```" : (i === responseChunks.length-1 ? "```" + responseChunks[i] : ("```" + responseChunks[i] + "```"))) : responseChunks[i]),
-                            embeds: (i === responseChunks.length-1 ? [explanationEmbed] : []),
-                            components: (i === responseChunks.length-1 ? [row as APIActionRowComponent<APIMessageActionRowComponent>] : [])
+                            content: (responseChunks.length > 1 ? (i === 0 ? responseChunks[i] + "```" : (i === responseChunks.length - 1 ? "```" + responseChunks[i] : ("```" + responseChunks[i] + "```"))) : responseChunks[i]),
+                            embeds: (i === responseChunks.length - 1 ? [explanationEmbed] : []),
+                            components: (i === responseChunks.length - 1 ? [row as APIActionRowComponent<APIMessageActionRowComponent>] : [])
                         });
                     }
-                    setTimeout(() => {
-                        untrackThread(thread.id);
-                        thread.delete()
-                            .then(() => console.log(`Thread ${thread.id} successfully deleted`))
-                            .catch(console.error)
-                    }, 5*60*1000); // 5 minutes ; TODO: config
+                    setTimeout(async () => {
+                        const success = untrackThread(thread.id);
+                        const channel = await client.channels.fetch(thread.id);
+                        if (success && channel) { // check if the thread actually exists
+                            thread.delete()
+                                .then(() => console.log(`Thread ${thread.id} successfully deleted`))
+                                .catch(console.error)
+                        }
+                    }, 5 * 60 * 1000); // 5 minutes ; TODO: config
                 } catch (error) {
                     thread.delete();
                     console.error("Error sending response:", error);

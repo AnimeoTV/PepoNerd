@@ -42,3 +42,18 @@ export function splitTextIntoChunks(text: string, maxLength: number = 2000): str
 
     return chunks;
 }
+
+
+export function stripCodeBlocksBacksticks(text: string): string {
+    console.log("text.length", text.length)
+    text = text.trim();
+    const CODE_BLOCK_DELIMITER = "```";
+    const idx = text.indexOf(CODE_BLOCK_DELIMITER);
+    if (idx < 0) {
+        return text;
+    }
+
+    text = text.slice(idx + CODE_BLOCK_DELIMITER.length, text.length-CODE_BLOCK_DELIMITER.length);
+    console.log("output.length", text.length)
+    return text;
+}

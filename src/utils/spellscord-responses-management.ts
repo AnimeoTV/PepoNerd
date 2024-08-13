@@ -94,3 +94,25 @@ export function beautifyResponse(response: string): string {
     return output;
 }
 
+
+function removeEmptyLines(text: string) {
+    // Utilise une expression régulière pour remplacer les lignes vides par une chaîne vide
+    return text.replace(/^\s*[\r\n]/gm, '');
+}
+
+export function generateDiff(original: string, edited: string) {
+    let diff: Array<string> = [];
+    const originalLines: Array<string> = removeEmptyLines(original).split("\n");
+    const editedLines: Array<string> = removeEmptyLines(edited).split("\n");
+    
+    for (let i = 0; i < originalLines.length; i++) {
+        if (clearString(originalLines[i] ?? "") !== clearString(editedLines[i] ?? "")) {
+            diff.push(
+                "- " + originalLines[i] + "\n" +
+                "+ " + editedLines[i] + "\n"
+            )
+        }
+    }
+
+    return (diff.length > 0 ? "```diff\n" + diff.join("\n") + "```" : "");
+}
