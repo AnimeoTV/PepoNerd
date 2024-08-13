@@ -3,7 +3,6 @@ import { ActionRowBuilder, APIActionRowComponent, APIMessageActionRowComponent, 
 import { splitTextIntoChunks } from "../utils/strings";
 import { isGuildTextThreadManager, isThreadable } from "../types/discordjs-typeguards";
 import constants from "../utils/constants";
-import { messagesCountToIgnore, endDisclaimer } from "../../config.json";
 import { beautifyResponse, generateDiff, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/spellscord-responses-management";
 import { addPrivateThread, addUser, isSTFUed, untrackThread } from "../utils/database";
 import { loadTranslations } from "../utils/localization";
@@ -12,6 +11,7 @@ import { localization } from "../../config.json";
 
 let explanationBeautifier: string = "";
 let noExplanationProvided: string = "";
+let endDisclaimer: string = "";
 let copyButtonLabel: string = "";
 let sendRawButtonLabel: string = "";
 let archiveThreadButtonLabel: string = "";
@@ -22,6 +22,9 @@ loadTranslations(localization).then((translation) => {
     }
     if (translation?.noExplanationProvided) {
         noExplanationProvided = translation.noExplanationProvided;
+    }
+    if (translation?.endDisclaimer) {
+        endDisclaimer = translation.endDisclaimer;
     }
     if (translation?.copyButtonLabel) {
         copyButtonLabel = translation.copyButtonLabel;

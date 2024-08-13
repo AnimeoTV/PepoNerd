@@ -1,6 +1,6 @@
 {
     "description": "The langage that the bot uses. You can add your own translations or edit the pre-existing ones in the src/locales folder.",
-    "localization": "fr",
+    "localization": "en",
 
     "description": "channel categories of Discord where the bot will work",
     "channelCategories"       : [
@@ -17,17 +17,11 @@
         "295590905132482561"
     ],
 
-    "description": "Number of messages that the bot will ignore (starting to the beginning of the chat history)",
-    "messagesCountToIgnore": 0,
-
     "description": "List of all the models that Spellscord can use to answer the user (the order counts as priority order)",
     "supportedModelsID": [
         "llama-3.1-405b-reasoning",
         "llama-3.1-70b-versatile",
         "llama3-70b-8192",
         "gemma2-9b-it"
-    ],
-
-    "description": "The text that will be append at the end of the message",
-    "endDisclaimer": "Important: Spellscord can make mistakes. Consider checking text diff before editing your message. This message will self-delete within 5 minutes."
+    ]
 }

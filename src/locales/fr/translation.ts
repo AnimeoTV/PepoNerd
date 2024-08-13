@@ -27,6 +27,7 @@ Dans un second temps, tu dois TOUJOURS expliquer de façon claire, précise et c
     messageBodyBeautifier: "**Message corrigé** :\n",
     explanationBeautifier: "### Explications\n",
     noExplanationProvided: "Aucune explication n'a été fournie.",
+    endDisclaimer: "Important : Spellscord peut commettre des erreurs. Pensez à vérifier le 'text diff' avant de modifier votre message. Ce message sera supprimé automatiquement dans 5 minutes.",
     copyButtonLabel: "Copier",
     sendRawButtonLabel: "Obtenir le texte brut",
     archiveThreadButtonLabel: "Archiver le thread",

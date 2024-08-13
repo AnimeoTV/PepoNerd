@@ -1,6 +1,6 @@
 
 import { loadTranslations } from "./localization";
-import { localization, endDisclaimer } from "../../config.json";
+import { localization } from "../../config.json";
 
 // import localized no mistakes sequence + explanation & message body delimiter
 let noMistakesSequences: string = "";

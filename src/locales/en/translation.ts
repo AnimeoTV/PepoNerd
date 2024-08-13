@@ -27,6 +27,7 @@ Secondly, you MUST ALWAYS explain clearly, precisely, and concisely your modific
     messageBodyBeautifier: "**Corrected message** :\n",
     explanationBeautifier: "### Explanations\n",
     noExplanationProvided: "No explanation was provided.",
+    endDisclaimer: "Important: Spellscord can make mistakes. Consider checking text diff before editing your message. This message will self-delete within 5 minutes.",
     copyButtonLabel: "Copy",
     sendRawButtonLabel: "Get raw text",
     archiveThreadButtonLabel: "Archive thread",
