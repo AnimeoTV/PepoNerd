@@ -1,9 +1,17 @@
 
 import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
 import path from "path";
-import { lines } from "../data/bully-lines.json";
 import { incrementBullyCounter } from "../utils/database";
+import { loadTranslations } from "../utils/localization";
+import { localization } from "../../config.json";
 
+
+let bullyLines: string = "";
+loadTranslations(localization).then((translation) => {
+    if (translation?.bullyLines) {
+        bullyLines = translation.bullyLines;
+    }
+});
 
 let bullyCount = 0;
 
@@ -35,11 +43,11 @@ export default {
             execute: async (interaction: ChatInputCommandInteraction) => {
                 incrementBullyCounter(interaction.user.id);
                 let gifPath;
-                if (bullyCount === lines.length - 2) {
+                if (bullyCount === bullyLines.length - 2) {
                     gifPath = path.join(__dirname, "../data/pepo-hanging-himself.gif");
                 }
                 await interaction.reply({
-                    content: lines[bullyCount >= lines.length ? lines.length-1 : bullyCount]?.replace("%n", (bullyCount+ 1).toString()),
+                    content: bullyLines[bullyCount >= bullyLines.length ? bullyLines.length-1 : bullyCount]?.replace("%n", (bullyCount+ 1).toString()),
                     files: (gifPath ? [gifPath] : undefined),
                     ephemeral: true })
                 bullyCount++;
