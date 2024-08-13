@@ -7,7 +7,7 @@ Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pop out 
 
 * **Customizable System Prompt:** TODO
 * **Event-Driven Architecture:** Spellscord utilizes Discord.js events to efficiently handle interactions, commands, and incoming messages.
-* **Configuration Options:**  Basic configuration settings are available in `config.json`, TODO
+* **Configuration Options:**  Basic configuration settings are available in `config.json`, such as localization and LLMs to use.
 
 ## Prerequisites
 

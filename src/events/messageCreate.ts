@@ -6,7 +6,7 @@ import constants from "../utils/constants";
 import { beautifyResponse, generateDiff, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/spellscord-responses-management";
 import { addPrivateThread, addUser, isSTFUed, untrackThread } from "../utils/database";
 import { loadTranslations } from "../utils/localization";
-import { localization } from "../../config.json";
+import { localization, autoDeletionDuration } from "../../config.json";
 
 
 let explanationBeautifier: string = "";
@@ -100,7 +100,7 @@ export default {
 
             const sendRaw = new ButtonBuilder()
                 .setCustomId("send-raw")
-                .setLabel(sendRawButtonLabel) // TODO: translation
+                .setLabel(sendRawButtonLabel)
                 .setStyle(ButtonStyle.Secondary);
 
             const ArchiveThread = new ButtonBuilder()
@@ -149,7 +149,7 @@ export default {
                                 .then(() => console.log(`Thread ${thread.id} successfully deleted`))
                                 .catch(console.error)
                         }
-                    }, 5 * 60 * 1000); // 5 minutes ; TODO: config
+                    }, autoDeletionDuration);
                 } catch (error) {
                     thread.delete();
                     console.error("Error sending response:", error);

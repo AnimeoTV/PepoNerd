@@ -17,6 +17,9 @@
         "295590905132482561"
     ],
 
+    "description": "Duration before the message is automatically deleted. (in ms)",
+    "autoDeletionDuration": 300000,
+
     "description": "List of all the models that Spellscord can use to answer the user (the order counts as priority order)",
     "supportedModelsID": [
         "llama-3.1-405b-reasoning",

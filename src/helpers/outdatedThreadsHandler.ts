@@ -1,6 +1,7 @@
 import { Client } from "discord.js";
 import { config } from "dotenv";
 import { getThreads, untrackThread } from "../utils/database"
+import { autoDeletionDuration } from "../../config.json";
 
 config();
 const GUILD_ID = process.env["GUILD_ID"] as string;
@@ -25,7 +26,7 @@ export async function handleOutdatedThreads(client: Client) {
                 } else {
                     console.log(`Thread ${thread.thread_id} not found`)
                 }
-            }, 5*60*1000 - (Date.now() - thread.timestamp)); // TODO: config
+            }, autoDeletionDuration - (Date.now() - thread.timestamp));
         } catch (err) {/* fail silently pls */}
     }
 }

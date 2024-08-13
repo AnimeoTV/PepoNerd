@@ -4,6 +4,7 @@ import Database from "better-sqlite3";
 import { Snowflake } from "discord.js";
 import path from "path";
 import { isHallOfShameArray, isThreadsArray } from "../types/spellscord-typeguards";
+import { autoDeletionDuration } from "../../config.json";
 
 const dbPath = path.join(__dirname, "../data/database.db");
 
@@ -116,10 +117,10 @@ export function getUsername(userId: Snowflake | undefined): string | undefined {
 }
 
 export function getOutdatedThreads(): Array<Thread> {
-    const fiveMinutesAgo = Date.now() - 5*60*1000; // TODO: config
+    const autoDeletionDurationAgo = Date.now() - autoDeletionDuration;
 
     const stmt = db.prepare("SELECT * FROM threads WHERE timestamp < ?");
-    const threads = stmt.all(fiveMinutesAgo);
+    const threads = stmt.all(autoDeletionDurationAgo);
     if (isThreadsArray(threads)) {
         return threads;
     }
