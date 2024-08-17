@@ -6,7 +6,7 @@ import constants from "../utils/constants";
 import { beautifyResponse, generateDiff, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/spellscord-responses-management";
 import { addPrivateThread, addUser, isSTFUed, untrackThread } from "../utils/database";
 import { loadTranslations } from "../utils/localization";
-import { localization, autoDeletionDuration } from "../../config.json";
+import { localization, channelCategories, channelsToIgnore, consideredRoles, autoDeletionDuration } from "../../config.json";
 
 
 let explanationBeautifier: string = "";
@@ -48,6 +48,12 @@ export default {
     name: "messageCreate",
     once: false, // Set to true for a one-time execution
     async execute(message: Message, client: Client): Promise<void> {
+        // Ignore messages from a not whitelisted categories and blacklisted channels
+        // @ts-ignore
+        if ((message.channel.parentId && !channelCategories.includes(message.channel.parentId)) || channelsToIgnore.includes(message.channelId)) return;
+
+        // Select messages from authors with considered roles
+        if (!message.member?.roles.cache.some((role) => consideredRoles.includes(role.id))) return;
 
         // Ignore messages from bots or sent in threads
         if (message.author.bot || message.channel.isThread()) return;
@@ -70,8 +76,7 @@ export default {
             console.log(`\n===== INPUT MESSAGE\n${userInput}\n`);
             if (!message.guild) return;
 
-            const member = message.guild.members.cache.get(message.author.id);
-            addUser(message.author.id, member?.displayName ?? message.author.globalName ?? message.author.username)
+            addUser(message.author.id)
 
             // Generate AI response using user input
             const response = trimStartMessageSequence(await AI.generate(userInput));
@@ -142,17 +147,21 @@ export default {
                         });
                     }
                     setTimeout(async () => {
-                        const success = untrackThread(thread.id);
-                        const channel = await client.channels.fetch(thread.id);
-                        if (success && channel) { // check if the thread actually exists
-                            thread.delete()
-                                .then(() => console.log(`Thread ${thread.id} successfully deleted`))
-                                .catch(console.error)
+                        try {
+                            const success = untrackThread(thread.id);
+                            const channel = await client.channels.fetch(thread.id);
+                            if (success && channel) { // check if the thread actually exists
+                                thread.delete()
+                                    .then(() => console.log(`Thread ${thread.id} successfully deleted`))
+                                    .catch(console.error)
+                            }
+                        } catch(err) {
+                            console.log(`Thread ${thread.id} has already been deleted`)
                         }
                     }, autoDeletionDuration);
                 } catch (error) {
-                    thread.delete();
                     console.error("Error sending response:", error);
+                    thread.delete();
                 }
             }
         } catch (error) {

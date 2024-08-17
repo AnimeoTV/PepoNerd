@@ -12,8 +12,7 @@ const db = new Database(dbPath, { verbose: console.log });
 
 db.prepare(`
     CREATE TABLE IF NOT EXISTS users (
-        user_id TEXT PRIMARY KEY,
-        username VARCHAR(32)
+        user_id TEXT PRIMARY KEY
     )
 `).run();
 db.prepare(`
@@ -44,9 +43,9 @@ export {
 }
 
 // setters
-export function addUser(userId: Snowflake, displayName: string) {
-    const stmt = db.prepare("INSERT OR REPLACE INTO users (user_id, username) VALUES (?, ?)");
-    stmt.run(userId, displayName);
+export function addUser(userId: Snowflake) {
+    const stmt = db.prepare("INSERT OR REPLACE INTO users (user_id) VALUES (?)");
+    stmt.run(userId);
 }
 
 export function addPrivateThread(threaId: Snowflake, ownerId: Snowflake, timestamp: Number) {
@@ -55,6 +54,7 @@ export function addPrivateThread(threaId: Snowflake, ownerId: Snowflake, timesta
 }
 
 export function incrementBullyCounter(userId: Snowflake): void {
+    addUser(userId);
     const getUserQuery = "SELECT COUNT(*) AS count FROM hall_of_shame WHERE user_id = ?";
     const incrementUserQuery = "UPDATE hall_of_shame SET bully_count = bully_count + 1 WHERE user_id = ?";
     const insertUserQuery = "INSERT INTO hall_of_shame (user_id, bully_count) VALUES (?, 1)";
@@ -85,6 +85,7 @@ export function untrackThread(threadId: Snowflake): boolean {
 }
 
 export function addSTFU(userId: Snowflake, duration: number) {
+    addUser(userId);
     const stmt = db.prepare("INSERT OR REPLACE INTO stfu (user_id, stfu_end_timestamp) VALUES (?, ?)");
     const now = Date.now();
     const endTimestamp = Math.floor(now + duration*3600*1000);
@@ -98,22 +99,6 @@ export function getHallOfShame(): Array<HallOfShame> {
         return rows;
     }
     return [];
-}
-
-export function getUsername(userId: Snowflake | undefined): string | undefined {
-    if (!userId) {
-        return;
-    }
-
-    const stmt = db.prepare("SELECT username FROM users WHERE user_id = ?");
-
-    const row = stmt.get(userId);
-
-    if ((row as User).username) {
-        return (row as User).username;
-    }
-
-    return;
 }
 
 export function getOutdatedThreads(): Array<Thread> {
