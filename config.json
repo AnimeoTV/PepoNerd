@@ -2,7 +2,7 @@
     "description": "The langage that the bot uses. You can add your own translations or edit the pre-existing ones in the src/locales folder.",
     "localization": "fr",
 
-    "description": "Channel categories of Discord where the bot will work",
+    "description": "Channel categories of the guild where the bot will be active",
     "channelCategories"       : [
         "1266437448959791105"
     ],

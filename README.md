@@ -5,9 +5,9 @@ Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pop out 
 
 ## Features
 
-* **Customizable System Prompt:** TODO
+* **Customizable System Prompt:** Localize in your langage and tweak the system prompt to fit your needs.
 * **Event-Driven Architecture:** Spellscord utilizes Discord.js events to efficiently handle interactions, commands, and incoming messages.
-* **Configuration Options:**  Basic configuration settings are available in `config.json`, such as localization and LLMs to use.
+* **Configuration Options:**  Basic configuration settings are available in `config.json`: you can easily configure on which channels, channel categories, user roles, the bot will be active. You also can configure which LLMs are used and specify a custom localization.
 
 ## Prerequisites
 
@@ -44,12 +44,18 @@ Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pop out 
 4. **Configuration:**
    Adjust settings in `config.json`:
 
-   TODO
+   * `localization`: The langage that the bot uses. (You can add your own translations)
+   * `channelCategories`: Channel 'categories' of the guild where the bot will be active
+   * `channelsToIgnore`: Channels to ignore in those categories
+   * `consideredRoles`: The bot will react only to users with those roles
+   * and some other useful options you can tweak (check out `config.json`)
+
 5. **Build and Run:**
 
    ```bash
    pnpm run build  # Compiles TypeScript code
-   pnpm run main   # Starts the bot
+   pnpm run dev    # Watch for code edits, compiles and run in realtime
+   pnpm run main   # Starts the bot for prod
    ```
 
 ## Usage
@@ -60,10 +66,10 @@ Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pop out 
 
 ## Customization
 
-* **System Prompt:**  Edit `src/ai/AI.ts` to refine Spellscord' responses:
-  * Modify the system instructions, guidelines, and database to align with your needs.
+* **System Prompt:**  Edit `src/locales/<localization>/translation.ts` to refine Spellscord' responses:
+  * Modify the system context, guidelines, and few-shots to align with your needs.
+* **Configure Spellscord's behavior:**  Edit `config.json` and adapt Spellscord's behavior and rules of engagement to your needs.
 * **Commands and Events:**  Extend Spellscord's functionality by creating new commands in `src/commands` and events in `src/events`.
-* **Advanced Configuration:** (Future Development) Implement more robust configuration options for role-based access control and bot management.
 
 ## Contributing
 
