@@ -87,19 +87,26 @@ export default {
                 return;
             }
 
+            // Ping the message author to invite them in the private thread + link to the message to direct access and edit
+            const header = `<@${message.author.id}> 🗣️ https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}\n`;
+
             const parsedResponse = parseResponse(response);
+
+            // quick overview of what changed
             const diff = generateDiff(parseResponse(userInput)[0] ?? "", parsedResponse[0] ?? "");
 
             const explanationEmbed = new EmbedBuilder()
                 .setColor(0x5a8c3f)
-                .setDescription((diff && ("### Text diff\n" + diff + "\n" +  "-# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n" + explanationBeautifier)) + (parsedResponse[1] || noExplanationProvided))
+                .setDescription((diff && ("### Text diff\n" + diff + "\n"
+                                +  "-# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n" + explanationBeautifier))
+                                + (parsedResponse[1] || noExplanationProvided))
                 .setFooter({ text: endDisclaimer, iconURL: "https://i.imgur.com/bQdDRAm.png" });
 
             const txt2clipboardURL = `https://text2clipboard.netlify.app/?text=${encodeURIComponent(parsedResponse[0] ?? "")}`;
             const MobileCopy = new ButtonBuilder()
                 .setLabel(copyButtonLabel)
-                // check out https://github.com/Truiteseche/text2clipboard
-                .setURL(txt2clipboardURL.slice(0, 512))
+                // check out https://github.com/Truiteseche/text2clipboard licensed under WTFPL license
+                .setURL(txt2clipboardURL.slice(0, 512)) // links URL are limited to 512 chars for discord link button
                 .setStyle(ButtonStyle.Link)
                 .setDisabled(!parsedResponse[0] || txt2clipboardURL !== txt2clipboardURL.slice(0, 512));
 
@@ -121,8 +128,6 @@ export default {
             const row: unknown = new ActionRowBuilder()
                 .addComponents(MobileCopy, sendRaw, ArchiveThread, DeleteThread);
 
-            const header = `<@${message.author.id}> 🗣️ https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}\n`;
-
             // ensure we can create a private thread in the current channel
             if (isThreadable(message.channel) && isGuildTextThreadManager(message.channel.threads)) {
                 const thread = await message.channel.threads.create({
@@ -134,8 +139,7 @@ export default {
                 try {
                     addPrivateThread(thread.id, message.author.id, thread.createdTimestamp ?? Date.now());
 
-                    let finalOutput = "";
-                    finalOutput = header + beautifyResponse(parsedResponse[0] ?? "");
+                    let finalOutput = header + beautifyResponse(parsedResponse[0] ?? "");
 
                     // Make sure to not send a message that exceeds discord's message length limit
                     const responseChunks: string[] = splitTextIntoChunks(finalOutput, constants.MAX_MESSAGE_LENGTH);

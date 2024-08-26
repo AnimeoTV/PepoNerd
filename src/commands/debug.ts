@@ -43,63 +43,9 @@ export default {
                             await interaction.channel.send("## -------------------");
                         }
                         await interaction.channel.send("# Benchmark end");
-                        // const messages          = await interaction.channel?.messages.fetch();
-                        // const firstMessage      = messages?.last();
-                        // const embeds            = firstMessage?.embeds;
-
-                        // if (!embeds) {
-                        //     await interaction.reply({ content: "No embeds found", ephemeral: true });
-                        //     return;
-                        // }
-
-                        // const embedInfo         = embeds[0]?.description;
-                        // const infoMatch         = embedInfo?.match(/(?<=\*\*Nombre de fois réclamé:\*\* )\d+/);
-                        // const author            = embedInfo?.match(/(?<=\*\*Créé par:\*\* )<@\d+>/);
-
-                        // if(!infoMatch){
-                        //     await interaction.reply({ content: "Count number not found", ephemeral: true })
-                        //     return;
-                        // }
-
-                        // const infoValue         = parseInt(infoMatch[0]);
-
-                        // const embedDescription  = embeds[1]?.description;
-                        // const descriptionMatch  = embedDescription?.match(/```(.*?)```/s);
-                        // const descriptionValue  = descriptionMatch ? descriptionMatch[1] : null;
-
-                        // await interaction.reply({ content: `Count: ${infoValue}\nDescription: ${descriptionValue}\nAuthor: ${author}`, ephemeral: true });
                     }
                 }
             ]
-        },
-        {
-            name: "emit",
-            description: "Emit an event",
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-                {
-                    name: "event",
-                    description: "Event to emit",
-                    type: ApplicationCommandOptionType.String,
-                    choices: [
-                        {
-                            name: "channelCreate",
-                            value: "channelCreate"
-                        }
-                    ],
-                    required: true,
-                }
-            ],
-            execute: async (interaction: ChatInputCommandInteraction) => {
-                const event = interaction.options.getString("event")!;
-                if (!(interaction.channel instanceof GuildChannel)) {
-                    await interaction.reply({ content: `This command can only be used in a guild channel.`, ephemeral: true });
-                    return;
-                }
-                const channel: NonThreadGuildBasedChannel = interaction.channel;
-                interaction.client.emit(event, channel);
-                await interaction.reply({ content: `Event ${event} triggered`, ephemeral: true });
-            }
         }
     ]
 };
