@@ -14,3 +14,11 @@ interface HallOfShame {
     user_id: string,
     bully_count: number
 }
+
+interface MessageAnalysisReport {
+    correctionNeeded: boolean,
+    oldMessage: Message,
+    correction?: string,
+    explanations?: string,
+    textDiff?: string,
+}
