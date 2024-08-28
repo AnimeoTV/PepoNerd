@@ -21,6 +21,8 @@ export default {
                     type: ApplicationCommandOptionType.Subcommand,
                     execute: async (interaction: ChatInputCommandInteraction) => {
                         if (!interaction.channel) return;
+                        await interaction.deferReply();
+                        interaction.deleteReply();
                         await interaction.channel.send("# Benchmark start:");
                         for (let test of benchmark) {
                             await interaction.channel.send("## User Input:");
@@ -28,7 +30,7 @@ export default {
                             for (const chunk of userInputChunks) {
                                 await interaction.channel.send(chunk);
                             }
-                            
+
                             interaction.channel.send("## Spellscord answer:");
                             const response = (await AI.generate(test.userInput));
                             if (isNoMistakesSequence(response) || !isThereAnyRelevantCorrection(test.userInput, response)) {
@@ -39,35 +41,10 @@ export default {
                                     await interaction.channel.send(chunk);
                                 }
                             }
-                            
+
                             await interaction.channel.send("## -------------------");
                         }
                         await interaction.channel.send("# Benchmark end");
-                        // const messages          = await interaction.channel?.messages.fetch();
-                        // const firstMessage      = messages?.last();
-                        // const embeds            = firstMessage?.embeds;
-
-                        // if (!embeds) {
-                        //     await interaction.reply({ content: "No embeds found", ephemeral: true });
-                        //     return;
-                        // }
-
-                        // const embedInfo         = embeds[0]?.description;
-                        // const infoMatch         = embedInfo?.match(/(?<=\*\*Nombre de fois réclamé:\*\* )\d+/);
-                        // const author            = embedInfo?.match(/(?<=\*\*Créé par:\*\* )<@\d+>/);
-
-                        // if(!infoMatch){
-                        //     await interaction.reply({ content: "Count number not found", ephemeral: true })
-                        //     return;
-                        // }
-
-                        // const infoValue         = parseInt(infoMatch[0]);
-
-                        // const embedDescription  = embeds[1]?.description;
-                        // const descriptionMatch  = embedDescription?.match(/```(.*?)```/s);
-                        // const descriptionValue  = descriptionMatch ? descriptionMatch[1] : null;
-
-                        // await interaction.reply({ content: `Count: ${infoValue}\nDescription: ${descriptionValue}\nAuthor: ${author}`, ephemeral: true });
                     }
                 }
             ]
