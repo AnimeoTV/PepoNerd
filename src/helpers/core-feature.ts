@@ -66,6 +66,8 @@ export async function analyzeAndCorrectMessage(message: Message): Promise<Messag
         }
 
         const parsedResponse = parseResponse(response);
+        
+        // generate a quick overview of what changed ("diff" syntax)
         const diff = generateDiff(parseResponse(userInput)[0] ?? "", parsedResponse[0] ?? "");
 
         return {
@@ -119,6 +121,7 @@ export async function sendCorrection(analysisReport: MessageAnalysisReport, clie
         const row: unknown = new ActionRowBuilder()
             .addComponents(MobileCopy, sendRaw, ArchiveThread, DeleteThread);
         
+        // Ping the message author to invite them in the private thread + link to the message to direct access and edit
         const header = `<@${oldMsg.author.id}> 🗣️ https://discord.com/channels/${oldMsg.guildId}/${oldMsg.channelId}/${oldMsg.id}\n`;
 
         const targetChannel: GuildTextBasedChannel = channel ?? oldMsg.channel;
@@ -133,8 +136,7 @@ export async function sendCorrection(analysisReport: MessageAnalysisReport, clie
             try {
                 addPrivateThread(thread.id, oldMsg.author.id, thread.createdTimestamp ?? Date.now());
 
-                let finalOutput = "";
-                finalOutput = header + beautifyResponse(analysisReport.correction ?? "");
+                let finalOutput = header + beautifyResponse(analysisReport.correction ?? "");
 
                 // Make sure to not send a message that exceeds discord's message length limit
                 const responseChunks: string[] = splitTextIntoChunks(finalOutput, constants.MAX_MESSAGE_LENGTH);

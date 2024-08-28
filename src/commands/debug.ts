@@ -48,35 +48,6 @@ export default {
                     }
                 }
             ]
-        },
-        {
-            name: "emit",
-            description: "Emit an event",
-            type: ApplicationCommandOptionType.Subcommand,
-            options: [
-                {
-                    name: "event",
-                    description: "Event to emit",
-                    type: ApplicationCommandOptionType.String,
-                    choices: [
-                        {
-                            name: "channelCreate",
-                            value: "channelCreate"
-                        }
-                    ],
-                    required: true,
-                }
-            ],
-            execute: async (interaction: ChatInputCommandInteraction) => {
-                const event = interaction.options.getString("event")!;
-                if (!(interaction.channel instanceof GuildChannel)) {
-                    await interaction.reply({ content: `This command can only be used in a guild channel.`, ephemeral: true });
-                    return;
-                }
-                const channel: NonThreadGuildBasedChannel = interaction.channel;
-                interaction.client.emit(event, channel);
-                await interaction.reply({ content: `Event ${event} triggered`, ephemeral: true });
-            }
         }
     ]
 };

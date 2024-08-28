@@ -28,7 +28,7 @@ loadTranslations(localization).then((translation) => {
 export default {
     name: "interactionCreate",
     once: false,
-    async execute(interaction: ButtonInteraction, client:Client, commands: any[]) {
+    async execute(interaction: ButtonInteraction) {
         try {
             // Check if the interaction is a chat input command
             if (interaction.isButton()) {

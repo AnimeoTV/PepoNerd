@@ -40,9 +40,11 @@ export default {
                 let gifPath: string;
                 let message: string;
                 if (duration === 0) {
+                    // stfu cleared
                     message = stfuSpellscordComeback;
                     gifPath = path.join(__dirname, "../data/pepo-comfy.gif")
                 } else {
+                    // stfued
                     message = stfuSpellscord.replace("%duration", duration.toString());
                     gifPath = path.join(__dirname, "../data/pepo-go-away.gif")
                 }
