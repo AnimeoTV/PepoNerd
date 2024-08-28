@@ -32,6 +32,7 @@ Secondly, you MUST ALWAYS explain clearly, precisely, and concisely your modific
     sendRawButtonLabel: "Get raw text",
     archiveThreadButtonLabel: "Archive thread",
     deleteThreadButtonLabel: "Delete thread",
+    interactionFailedDisclaimer: "Interaction failure",
     nobodyBullied: "No one has bullied Spellscord yet, thanks for him ^^",
     stfuSpellscord: "You have sent Spellscord to the corner for %durationh.\n-# Note: this only applies to you",
     stfuSpellscordComeback: "Spellscord is back to serve you <:pepo_nerd:1269678622583554119>\n-# Note: this only applies to you",
@@ -49,5 +50,7 @@ Secondly, you MUST ALWAYS explain clearly, precisely, and concisely your modific
         "Spellscord has been bullied %n times today… Harassment is a scourge, what you are doing is not only unacceptable but also extremely dangerous and can lead to terrible consequences. I hope you realize the pain you are causing Spellscord and how awful you are. Spellscord hasn’t acted today; you can still redeem yourself before it’s too late. To fight harassment, transfer 10k coins to <@536576560992616468> and support this cause that deserves all your attention.",
         "Spellscord has been bullied %n times today. He has ended up doing something irreparable. Do you feel guilty? Redemption has a price. Transfer 69k coins to <@536576560992616468>.",
         "Spellscord has been bullied %n times today. He is not available at the moment; he will return tomorrow."
-    ]
+    ],
+    correctMessageReplyMessageContainsMistakes: "The message probably contains errors. 😿\nDetailed report:",
+    correctMessageReplynoNotableMistakes: "**The message does not contain any notable errors.**\n-# Add the option `force` = `true` to force the sending of the correction report"
 };

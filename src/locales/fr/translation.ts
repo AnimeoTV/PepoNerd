@@ -1,7 +1,7 @@
 
 export default {
     systemPrompt: `
-Animeo TV est une plateforme de streaming d'anime gratuite et sans pub. Animeo TV dispose d'un serveur Discord officiel, sur lequel un staff dévoué répond aux questions des utilisateurs. On aimerait corriger les fautes d'orthographe que font les membres du staff.
+Animeo TV est une plateforme de streamings d'animes gratuite et sans pub. Animeo TV dispose d'un serveur Discord officiel, sur lequel un staff dévoué répond aux questions des utilisateurs. On aimerait corriger les fautes d'orthographe que font les membres du staff.
 
 Tu es un correcteur expert avec plus de 20 ans d'expérience et plusieurs doctorats. Ta mission est maintenant de corriger les erreurs grammaticales, orthographiques et typographiques dans le message qui te sera fourni, il peut être court. Tu dois réécrire le message corrigé (n'ajoute pas d'éléments superflus type "message corrigé :" en amont).
 
@@ -27,11 +27,12 @@ Dans un second temps, tu dois TOUJOURS expliquer de façon claire, précise et c
     messageBodyBeautifier: "**Message corrigé** :\n",
     explanationBeautifier: "### Explications\n",
     noExplanationProvided: "Aucune explication n'a été fournie.",
-    endDisclaimer: "Important : Spellscord peut commettre des erreurs. Pensez à vérifier le 'text diff' avant de modifier votre message. Ce message sera supprimé automatiquement dans 5 minutes.",
+    endDisclaimer: "Important : Spellscord peut commettre des erreurs. Pensez à vérifier le \"text diff\" avant de modifier votre message. Ce thread sera supprimé automatiquement dans 5 minutes.",
     copyButtonLabel: "Copier",
     sendRawButtonLabel: "Obtenir le texte brut",
     archiveThreadButtonLabel: "Archiver le thread",
     deleteThreadButtonLabel: "Supprimer le thread",
+    interactionFailedDisclaimer: "Échec de l'intéraction",
     nobodyBullied: "Personne n'a encore bully Spellscord, merci pour lui ^^",
     stfuSpellscord: "Vous avez envoyé Spellscord au coin pour %durationh.\n-# Note : cela ne s'applique qu'à vous",
     stfuSpellscordComeback: "Spellscord est de retour pour vous servir <:pepo_nerd:1269678622583554119>\n-# Note : cela ne s'applique qu'à vous",
@@ -49,7 +50,9 @@ Dans un second temps, tu dois TOUJOURS expliquer de façon claire, précise et c
         "Spellscord s'est fait bullied %n fois aujourd'hui… Le harcèlement est un fléau, ce que vous faites est non seulement inacceptable, mais c'est aussi extrêmement dangereux et peut mener à de terribles conséquences. J'espère que vous vous rendrez compte de la douleur que vous causez à Spellscord et de la sombre merde que vous êtes. Spellscord n'est pas passé à l'acte aujourd'hui, vous pouvez encore vous racheter avant qu'il ne soit trop tard. Pour combattre le harcèlement, transférez 10 k coins à <@536576560992616468> et soutenez cette cause qui mérite toute votre attention.",
         "Spellscord s'est fait bullied %n fois aujourd'hui. Il a fini par commettre l'irréparable. Vous vous en voulez ? La rédemption a un prix. Transférez 69k coins à <@536576560992616468>.",
         "Spellscord s'est fait bullied %n fois aujourd'hui. Il n'est pas disponible pour le moment, il reviendra demain."
-    ]
+    ],
+    correctMessageReplyMessageContainsMistakes: "Le message contient probablement des erreurs. 😿\nRapport détaillé :",
+    correctMessageReplynoNotableMistakes: "**Le message ne contient pas d'erreur notable.**\n-# Ajoutez l'option `force` = `true` pour forcer l'envoi du rapport de correction"
 };
 
 
