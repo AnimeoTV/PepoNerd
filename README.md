@@ -1,12 +1,12 @@
 
-# Spellscord - Your Discord spell checking assistant
+# Pepo Nerd - Your Discord spell checking assistant
 
-Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pop out of nowhere and provide relevant correction to messages containing spelling mistakes.
+Pepo Nerd is a Discord bot powered by Groq's powerful LLM, designed to pop out of nowhere and provide relevant correction to messages containing spelling mistakes.
 
 ## Features
 
 * **Customizable System Prompt:** Localize in your langage and tweak the system prompt to fit your needs.
-* **Event-Driven Architecture:** Spellscord utilizes Discord.js events to efficiently handle interactions, commands, and incoming messages.
+* **Event-Driven Architecture:** Pepo Nerd utilizes Discord.js events to efficiently handle interactions, commands, and incoming messages.
 * **Configuration Options:**  Basic configuration settings are available in `config.json`: you can easily configure on which channels, channel categories, user roles, the bot will be active. You also can configure which LLMs are used and specify a custom localization.
 
 ## Prerequisites
@@ -21,8 +21,8 @@ Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pop out 
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/Truiteseche/spellscord.git
-   cd spellscord
+   git clone https://github.com/AnimeoTV/PepoNerd.git
+   cd PepoNerd
    ```
 
 2. **Install Dependencies:**
@@ -60,16 +60,16 @@ Spellscord is a Discord bot powered by Groq's powerful LLM, designed to pop out 
 
 ## Usage
 
-* **Invite Spellscord to your Server:**  Generate an invite link from the Discord Developer Portal for your bot.
-* **Interact with Spellscord:** Once Spellscord is in your server and active in the configured categories, send messages in those channels to initiate conversations.
+* **Invite Pepo Nerd to your Server:**  Generate an invite link from the Discord Developer Portal for your bot.
+* **Interact with Pepo Nerd:** Once Pepo Nerd is in your server and active in the configured categories, send messages in those channels to initiate conversations.
 * **Developer Commands:** Use the `/debug` slash command for testing and troubleshooting.
 
 ## Customization
 
-* **System Prompt:**  Edit `src/locales/<localization>/translation.ts` to refine Spellscord' responses:
+* **System Prompt:**  Edit `src/locales/<localization>/translation.ts` to refine Pepo Nerd' responses:
   * Modify the system context, guidelines, and few-shots to align with your needs.
-* **Configure Spellscord's behavior:**  Edit `config.json` and adapt Spellscord's behavior and rules of engagement to your needs.
-* **Commands and Events:**  Extend Spellscord's functionality by creating new commands in `src/commands` and events in `src/events`.
+* **Configure Pepo Nerd's behavior:**  Edit `config.json` and adapt Pepo Nerd's behavior and rules of engagement to your needs.
+* **Commands and Events:**  Extend Pepo Nerd's functionality by creating new commands in `src/commands` and events in `src/events`.
 
 ## Contributing
 

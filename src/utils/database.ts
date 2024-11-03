@@ -3,7 +3,7 @@ import Database from "better-sqlite3";
 // const Database = require("better-sqlite3");
 import { Snowflake } from "discord.js";
 import path from "path";
-import { isHallOfShameArray, isThreadsArray } from "../types/spellscord-typeguards";
+import { isHallOfShameArray, isThreadsArray } from "../types/pepo-nerd-typeguards";
 import { autoDeletionDuration } from "../../config.json";
 
 const dbPath = path.join(__dirname, "../data/database.db");

@@ -5,7 +5,7 @@ import { isGuildTextThreadManager, isThreadable } from "../types/discordjs-typeg
 import AI from "../ai/AI";
 import constants from "../utils/constants";
 import { addPrivateThread, addUser, untrackThread } from "../utils/database";
-import { beautifyResponse, generateDiff, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/spellscord-responses-management";
+import { beautifyResponse, generateDiff, isNoMistakesSequence, isThereAnyRelevantCorrection, parseResponse, trimStartMessageSequence } from "../utils/pepo-nerd-responses-management";
 import { loadTranslations } from "../utils/localization";
 import { localization, autoDeletionDuration } from "../../config.json";
 

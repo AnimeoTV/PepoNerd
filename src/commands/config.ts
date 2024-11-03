@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType } from "discord.js
 
 export default {
     name: "config",
-    description: "Configure Spellscord settings",
+    description: "Configure Pepo Nerd settings",
     options: [
         {
             name: "access",

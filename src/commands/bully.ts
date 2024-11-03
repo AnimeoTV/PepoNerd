@@ -34,11 +34,11 @@ setTimeout(() => {
 
 export default {
     name: "bully",
-    description: "Bully Spellscord because he's cringe",
+    description: "Bully Pepo Nerd because he's delightfully cringe",
     options: [
         {
-            name: "spellscord",
-            description: "Bully Spellscord because he's cringe",
+            name: "pepo-nerd",
+            description: "Bully Pepo Nerd because he's delightfully cringe",
             type: ApplicationCommandOptionType.Subcommand,
             execute: async (interaction: ChatInputCommandInteraction) => {
                 incrementBullyCounter(interaction.user.id);

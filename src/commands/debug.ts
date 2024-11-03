@@ -4,7 +4,7 @@ import { benchmark } from "../data/benchmark.json";
 import constants from "../utils/constants";
 import { splitTextIntoChunks } from "../utils/strings";
 import AI from "../ai/AI";
-import { isNoMistakesSequence, isThereAnyRelevantCorrection, containsTheExactUserInput } from "../utils/spellscord-responses-management";
+import { isNoMistakesSequence, isThereAnyRelevantCorrection, containsTheExactUserInput } from "../utils/pepo-nerd-responses-management";
 
 export default {
     name: "debug",
@@ -31,7 +31,7 @@ export default {
                                 await interaction.channel.send(chunk);
                             }
 
-                            interaction.channel.send("## Spellscord answer:");
+                            interaction.channel.send("## Pepo Nerd answer:");
                             const response = (await AI.generate(test.userInput));
                             if (isNoMistakesSequence(response) || !isThereAnyRelevantCorrection(test.userInput, response)) {
                                 await interaction.channel.send("[No mistakes]");

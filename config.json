@@ -12,7 +12,7 @@
         "1274170323922849793"
     ],
 
-    "description": "Members with those roles will be considered by Spellscord",
+    "description": "Members with those roles will be considered by Pepo Nerd",
     "consideredRoles": [
         "1254268006133923911"
     ],
@@ -25,7 +25,7 @@
     "description": "Duration before the message is automatically deleted. (in ms)",
     "autoDeletionDuration": 300000,
 
-    "description": "List of all the models that Spellscord can use to answer the user (the order counts as priority order)",
+    "description": "List of all the models that Pepo Nerd can use to answer the user (the order counts as priority order)",
     "supportedModelsID": [
         "llama-3.1-405b-reasoning",
         "llama-3.1-70b-versatile",

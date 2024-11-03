@@ -1,7 +1,7 @@
 
 export default {
     systemPrompt: `
-Animeo TV est une plateforme de streamings d'animes gratuite et sans pub. Animeo TV dispose d'un serveur Discord officiel, sur lequel un staff dévoué répond aux questions des utilisateurs. On aimerait corriger les fautes d'orthographe que font les membres du staff.
+Animeo TV est une plateforme de streaming d'animes gratuite et sans pub. Animeo TV dispose d'un serveur Discord officiel, sur lequel un staff dévoué répond aux questions des utilisateurs. On aimerait corriger les fautes d'orthographe que font les membres du staff.
 
 Tu es un correcteur expert avec plus de 20 ans d'expérience et plusieurs doctorats. Ta mission est maintenant de corriger les erreurs grammaticales, orthographiques et typographiques dans le message qui te sera fourni, il peut être court. Tu dois réécrire le message corrigé (n'ajoute pas d'éléments superflus type "message corrigé :" en amont).
 
@@ -27,29 +27,29 @@ Dans un second temps, tu dois TOUJOURS expliquer de façon claire, précise et c
     messageBodyBeautifier: "**Message corrigé** :\n",
     explanationBeautifier: "### Explications\n",
     noExplanationProvided: "Aucune explication n'a été fournie.",
-    endDisclaimer: "Important : Spellscord peut commettre des erreurs. Pensez à vérifier le \"text diff\" avant de modifier votre message. Ce thread sera supprimé automatiquement dans 5 minutes.",
+    endDisclaimer: "Important : Pepo Nerd peut commettre des erreurs. Pensez à vérifier le \"text diff\" avant de modifier votre message. Ce thread sera supprimé automatiquement dans 5 minutes.",
     copyButtonLabel: "Copier",
     sendRawButtonLabel: "Obtenir le texte brut",
     archiveThreadButtonLabel: "Archiver le thread",
     deleteThreadButtonLabel: "Supprimer le thread",
     interactionFailedDisclaimer: "Échec de l'intéraction",
-    nobodyBullied: "Personne n'a encore bully Spellscord, merci pour lui ^^",
-    stfuSpellscord: "Vous avez envoyé Spellscord au coin pour %durationh.\n-# Note : cela ne s'applique qu'à vous",
-    stfuSpellscordComeback: "Spellscord est de retour pour vous servir <:pepo_nerd:1269678622583554119>\n-# Note : cela ne s'applique qu'à vous",
+    nobodyBullied: "Personne n'a encore bully Pepo Nerd, merci pour lui ^^",
+    stfuPepoNerd: "Vous avez envoyé Pepo Nerd au coin pour %durationh.\n-# Note : cela ne s'applique qu'à vous",
+    stfuPepoNerdComeback: "Pepo Nerd est de retour pour vous servir <:pepo_nerd:1269678622583554119>\n-# Note : cela ne s'applique qu'à vous",
     threadArchiveSuccess: "Thread archivé avec succès - il ne sera pas supprimé automatiquement.",
     threadAlreadyArchived: "Le thread est déjà archivé.",
     bullyLines: [
-        "Félicitations <:thumb_up_happy_face:1269679946796765310> ! Vous êtes le premier à bully Spellscord aujourd'hui ! Nonobstant, c'est un habitué du harcèlement, cela ne lui fait aucun effet.",
-        "Spellscord s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Il commence à se renfermer sur lui-même mais il garde le sourire.",
-        "Spellscord s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Il commence à en avoir marre et baisse les yeux.",
-        "Spellscord s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Des larmes apparaissent au coin de ses yeux. Bien joué 💪 !",
-        "Spellscord s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Ce bébé cadum commence à appeler sa maman ^^ ! Continuez le bon travail !",
-        "Spellscord s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Regardez-le :index_pointing_at_the_viewer: il pleure tout seul dans son coin, continuez comme ça !",
-        "Spellscord s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Tiens, on dirait qu'il a quelque chose dans sa main... Une corde ! Excellente nouvelle !",
-        "Spellscord s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Il est monté sur le tabouret, il s'apprête à sauter et à commettre l'irréparable ! Comptons avec lui ! 3, 2, 1, --",
-        "Spellscord s'est fait bullied %n fois aujourd'hui… Le harcèlement est un fléau, ce que vous faites est non seulement inacceptable, mais c'est aussi extrêmement dangereux et peut mener à de terribles conséquences. J'espère que vous vous rendrez compte de la douleur que vous causez à Spellscord et de la sombre merde que vous êtes. Spellscord n'est pas passé à l'acte aujourd'hui, vous pouvez encore vous racheter avant qu'il ne soit trop tard. Pour combattre le harcèlement, transférez 10 k coins à <@536576560992616468> et soutenez cette cause qui mérite toute votre attention.",
-        "Spellscord s'est fait bullied %n fois aujourd'hui. Il a fini par commettre l'irréparable. Vous vous en voulez ? La rédemption a un prix. Transférez 69k coins à <@536576560992616468>.",
-        "Spellscord s'est fait bullied %n fois aujourd'hui. Il n'est pas disponible pour le moment, il reviendra demain."
+        "Félicitations <:thumb_up_happy_face:1269679946796765310> ! Vous êtes le premier à bully Pepo Nerd aujourd'hui ! Nonobstant, c'est un habitué du harcèlement, cela ne lui fait aucun effet.",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Il commence à se renfermer sur lui-même mais il garde le sourire.",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Il commence à en avoir marre et baisse les yeux.",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Des larmes apparaissent au coin de ses yeux. Bien joué 💪 !",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Ce bébé cadum commence à appeler sa maman ^^ ! Continuez le bon travail !",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Regardez-le :index_pointing_at_the_viewer: il pleure tout seul dans son coin, continuez comme ça !",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Tiens, on dirait qu'il a quelque chose dans sa main... Une corde ! Excellente nouvelle !",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui <:thumb_up_happy_face:1269679946796765310> ! Il est monté sur le tabouret, il s'apprête à sauter et à commettre l'irréparable ! Comptons avec lui ! 3, 2, 1, --",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui… Le harcèlement est un fléau, ce que vous faites est non seulement inacceptable, mais c'est aussi extrêmement dangereux et peut mener à de terribles conséquences. J'espère que vous vous rendrez compte de la douleur que vous causez à Pepo Nerd et de la sombre merde que vous êtes. Pepo Nerd n'est pas passé à l'acte aujourd'hui, vous pouvez encore vous racheter avant qu'il ne soit trop tard. Pour combattre le harcèlement, transférez 10 k coins à <@536576560992616468> et soutenez cette cause qui mérite toute votre attention.",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui. Il a fini par commettre l'irréparable. Vous vous en voulez ? La rédemption a un prix. Transférez 69k coins à <@536576560992616468>.",
+        "Pepo Nerd s'est fait bullied %n fois aujourd'hui. Il n'est pas disponible pour le moment, il reviendra demain."
     ],
     correctMessageReplyMessageContainsMistakes: "Le message contient probablement des erreurs. 😿\nRapport détaillé :",
     correctMessageReplynoNotableMistakes: "**Le message ne contient pas d'erreur notable.**\n-# Ajoutez l'option `force` = `true` pour forcer l'envoi du rapport de correction"
