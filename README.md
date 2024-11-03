@@ -5,9 +5,11 @@ Pepo Nerd is a Discord bot powered by Groq's powerful LLM, designed to pop out o
 
 ## Features
 
-* **Customizable System Prompt:** Localize in your langage and tweak the system prompt to fit your needs.
-* **Event-Driven Architecture:** Pepo Nerd utilizes Discord.js events to efficiently handle interactions, commands, and incoming messages.
-* **Configuration Options:**  Basic configuration settings are available in `config.json`: you can easily configure on which channels, channel categories, user roles, the bot will be active. You also can configure which LLMs are used and specify a custom localization.
+* **Relevant correction when you need it:** Pops out of nowhere when a spelling / grammar mistake is detected so as to provide relevant corrections. It won't interfere if there's no significant mistake
+* **Mistake explanations:** Provides "Text Diff" and explanations for mistakes so you don't make the same mistake twice
+* **Configuration Options:**  You can manage in which channels and for which roles Pepo Nerd looks for mistakes. Basic configuration settings are available in `config.json`
+* **Mute the bot:** With the /stfu command, mute the bot for you so that it no longer analyzes your messages
+* **Killer features:** Bully Pepo Nerd as he's delightfully cringe, and display the "Top bulliers" ladder to see who's the best bullier
 
 ## Prerequisites
 
